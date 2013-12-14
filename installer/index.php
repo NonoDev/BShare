@@ -3,25 +3,172 @@
      *  index.php: Pagina de inicio para recoger los datos del usuario
      */
 $error = false;
+$conexion = false;
+$crear = false;
 if(isset($_POST['instalar'])){
     //comprobar contraseñas
     if($_POST['user_pass']!= $_POST['pass_repeat']){
         echo "<div class='alert alert-danger'>Las contraseñas no coinciden!</div>";
     }
     try{
-    include_once 'config.php'; //conexion de base de datos
+    //conexion de base de datos
+    $CFG = array(
+        'host' => $_POST['host'],
+        'database' => $_POST['base'],
+        'user' => $_POST['user'],
+        'password' => $_POST['pass']
+    );
     
-   /* var_dump($_POST['host']);
-    var_dump($_POST['base']);
-    var_dump($_POST['user']);
-    var_dump($_POST['pass']);
-    var_dump($_POST['user_name']);
-    var_dump($_POST['user_pass']);
-    var_dump($_POST['pass_repeat']);
-    var_dump($_POST['email']);*/
+        $dbh = new PDO('mysql:host=' . $CFG['host'] . ';dbname=' . $CFG['database'] . ';charset=UTF-8;', $CFG['user'], $CFG['password']);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        $conexion = true;
+   
     }catch (PDOException $e){
+        $conexion = false;                                     
         $error = "Ha ocurrido un error al acceder a la base de datos: " /*. $e->getMessage()*/;
     }
+    
+    
+    //creación de las tablas
+    
+    if($conexion){
+        $dbh->beginTransaction();
+        try{
+                      $dbh->exec("CREATE TABLE IF NOT EXISTS `usuario` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `nombre_usuario` VARCHAR(60) NOT NULL,
+                        `nombre_completo` VARCHAR(90) NOT NULL,
+                        `usuario_pass` VARCHAR(40) NOT NULL,
+                        `es_admin` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                        PRIMARY KEY (`id`),
+                        UNIQUE INDEX `nombre_usuario_UNIQUE` (`nombre_usuario` ASC))
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `sesion` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `hash_sesion` VARCHAR(255) NOT NULL,
+                        `usuario_id` INT UNSIGNED NOT NULL,
+                        `creada` BIGINT UNSIGNED NOT NULL,
+                        `ultima_visita` BIGINT UNSIGNED NOT NULL,
+                        PRIMARY KEY (`id`),
+                        INDEX `usuario_id_fk_idx` (`usuario_id` ASC),
+                        CONSTRAINT `sesion_usuario_id_fk`
+                        FOREIGN KEY (`usuario_id`)
+                        REFERENCES `usuario` (`id`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE)
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `nivel` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `nombre` VARCHAR(40) NOT NULL,
+                        PRIMARY KEY (`id`))
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `asignatura` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `nivel_id` INT UNSIGNED NOT NULL,
+                        `nombre` VARCHAR(60) NOT NULL,
+                        PRIMARY KEY (`id`, `nombre`),
+                        INDEX `nivel_id_fk_idx` (`nivel_id` ASC),
+                        CONSTRAINT `asignatura_nivel_id_fk`
+                        FOREIGN KEY (`nivel_id`)
+                        REFERENCES `nivel` (`id`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE)
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `alumno` (
+                        `nie` BIGINT UNSIGNED NOT NULL,
+                        `nombre` VARCHAR(70) NOT NULL,
+                        `apellidos` VARCHAR(70) NOT NULL DEFAULT '',
+                        `telefono` VARCHAR(9) NOT NULL DEFAULT '',
+                        PRIMARY KEY (`nie`))
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `libro` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `isbn` VARCHAR(13) NOT NULL,
+                        `titulo` VARCHAR(80) NOT NULL,
+                        `autor` VARCHAR(85) NOT NULL,
+                        `anio` INT UNSIGNED NOT NULL,
+                        `asignatura_id` INT UNSIGNED NOT NULL,
+                        PRIMARY KEY (`id`),
+                        UNIQUE INDEX `isbn_UNIQUE` (`isbn` ASC),
+                        INDEX `asignatura_id_fk_idx` (`asignatura_id` ASC),
+                        CONSTRAINT `libro_asignatura_id_fk`
+                        FOREIGN KEY (`asignatura_id`)
+                        REFERENCES `asignatura` (`id`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE)
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `ejemplar` (
+                        `codigo` INT UNSIGNED NOT NULL,
+                        `libro_id` INT UNSIGNED NOT NULL,
+                        `estado` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                        `alumno_nie` BIGINT UNSIGNED NULL,
+                        PRIMARY KEY (`codigo`),
+                        INDEX `ejemplar_alumno_nie_fk_idx` (`alumno_nie` ASC),
+                        CONSTRAINT `ejemplar_alumno_nie_fk`
+                        FOREIGN KEY (`alumno_nie`)
+                        REFERENCES `alumno` (`nie`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE,
+                        INDEX `ejemplar_libro_id_fk_idx` (`libro_id` ASC),
+                        CONSTRAINT `ejemplar_libro_id_fk`
+                        FOREIGN KEY (`libro_id`)
+                        REFERENCES `libro` (`id`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE)
+                        ENGINE = InnoDB;");
+                        
+                        $dbh->exec("CREATE TABLE IF NOT EXISTS `historial` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `tipo` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                        `ejemplar_codigo` INT UNSIGNED NOT NULL,
+                        `alumno_nie` BIGINT UNSIGNED NULL,
+                        `estado` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                        `fecha` BIGINT UNSIGNED NOT NULL,
+                        `anotacion` BLOB NOT NULL,
+                        `usuario_id` INT UNSIGNED NOT NULL,
+                        PRIMARY KEY (`id`),
+                        INDEX `historial_ejemplar_codigo_fk_idx` (`ejemplar_codigo` ASC),
+                        INDEX `historial_alumno_nie_fk_idx` (`alumno_nie` ASC),
+                        CONSTRAINT `historial_ejemplar_codigo_fk`
+                        FOREIGN KEY (`ejemplar_codigo`)
+                        REFERENCES `ejemplar` (`codigo`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE,
+                        CONSTRAINT `historial_alumno_nie_fk`
+                        FOREIGN KEY (`alumno_nie`)
+                        REFERENCES `alumno` (`nie`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE,
+                        CONSTRAINT `historial_usuario_id_fk`
+                        FOREIGN KEY (`usuario_id`)
+                        REFERENCES `usuario` (`id`)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE)
+                        ENGINE = InnoDB;");
+            
+           $crear = true;
+           echo "<div class='alert alert-success'>Creacion de las tablas de la base de datos correcta!</div>";
+            
+    }  catch (PDOException $e){
+        $crear = false;
+        $error = "Ha ocurrido un error al crear las tablas de la base de datos";
+        echo "<div class='alert alert-danger'>Las contraseñas no coinciden!</div>";
+        $dbh->rollBack();
+    }
+    }
+    
+                        
+                      
+                    
+                    
+    
 }
 ?>
 <!DOCTYPE html>
@@ -32,8 +179,14 @@ if(isset($_POST['instalar'])){
         <title>Installer</title>
     </head>
     <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <a class="navbar-brand" href="#">Installer</a>
+            <p class="navbar-text navbar-right">Developed by <a href="#" class="navbar-link">Juan Antonio Valera</a></p>
+            
+        </nav>
         <?php
-        // put your code here
+        
+       var_dump($crear);
         ?>
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -54,6 +207,8 @@ if(isset($_POST['instalar'])){
             <div class="form-group">
             <label for="user_name">Nombre de usuario</label>
             <input class="form-control" type="text" name="user_name" id="user_name" placeholder="Nombre de usuario con privilegios de administrador en la aplicación"><br/>
+            <label for="full_name">Nombre completo</label>
+            <input class="form-control" type="text" name="full_name" id="full_name" placeholder="Nombre completo del usuario"><br/>
             <label for="user_pass">Contraseña de usuario</label>
             <input class="form-control" type="password" name="user_pass" id="user_pass" placeholder="Contraseña de usuario"><br/>
             <label for="pass_repeat">Repite la contraseña</label>
@@ -61,23 +216,43 @@ if(isset($_POST['instalar'])){
             <label for="email">Correo electrónico</label>
             
             <input class="form-control" type="email" name="email" id="email" placeholder="ejemplo@gmail.com"><br/>
-            <div class="row">
-                <div class="col-md-4">
+           
+                
             <button type="submit" name="instalar" class='btn btn-success'>Instalar</button><button type="reset" name="limpiar" class='btn btn-info'>Limpiar</button>
-                </div>
-            </div>
+              
+       
                 </div>
             
             </div>
         </div>
         </form>
                 <style type="text/css">
+                    .row{
+                        margin: 0 auto;
+                    }
                     h3{
                         text-align: center;
+                        margin-top: 80px;
+                        margin-bottom: 20px;
+                    }
+                    .alert-danger, .alert-success{
+                        margin-top: 50px;
                     }
                     button{
                         margin: 5px;
                     }
+                    .navbar-default{
+                        background: #39B3D7;
+                       
+                    }
+                    .navbar-default .navbar-brand {
+                    color: #fff;
+                    }
+                    .navbar-default .navbar-text {
+                    color: #fff;
+                    }
+                    
+                   
                 </style>
     </body>
 </html>
