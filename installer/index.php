@@ -1,25 +1,51 @@
-<?php
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <title>Installer</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <a class="navbar-brand" href="#">Installer</a>
+            <p class="navbar-text navbar-right">Developed by <a href="https://github.com/NonoDev" class="navbar-link">Juan Antonio Valera</a></p>
+            
+        </nav>
+       <?php
     /*
      *  index.php: Pagina de inicio para recoger los datos del usuario
      */
 $error = false;
 $conexion = false;
-$crear = false;
+$crear_tablas = false;
+$crear_usuario = false;
 if(isset($_POST['instalar'])){
-    //comprobar contraseñas
+    // =========== RECOGIDA DE DATOS ========== 
+    //Datos de db
+    $host = $_POST['host'];
+    $base = $_POST['base'];
+    $db_user = $_POST['user'];
+    $db_pass = $_POST['pass'];
+    
+    // Datos para el usuario
+   $full_name = $_POST['full_name'];
+   $user_name = $_POST['user_name'];
+   $user_pass = $_POST['user_pass'];
+    //comprobar contraseñas 
     if($_POST['user_pass']!= $_POST['pass_repeat']){
         echo "<div class='alert alert-danger'>Las contraseñas no coinciden!</div>";
     }
     try{
     //conexion de base de datos
     $CFG = array(
-        'host' => $_POST['host'],
-        'database' => $_POST['base'],
-        'user' => $_POST['user'],
-        'password' => $_POST['pass']
+        'host' => $host,
+        'database' => $base,
+        'user' => $db_user,
+        'password' => $db_pass
     );
     
-        $dbh = new PDO('mysql:host=' . $CFG['host'] . ';dbname=' . $CFG['database'] . ';charset=UTF-8;', $CFG['user'], $CFG['password']);
+        $dbh = new PDO('mysql:host=' . $CFG['host'] . ';dbname=' . $CFG['database'] . ';charset=UTF8;', $CFG['user'], $CFG['password']);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $conexion = true;
@@ -40,24 +66,9 @@ if(isset($_POST['instalar'])){
                         `nombre_usuario` VARCHAR(60) NOT NULL,
                         `nombre_completo` VARCHAR(90) NOT NULL,
                         `usuario_pass` VARCHAR(40) NOT NULL,
-                        `es_admin` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                        `administrador` TINYINT UNSIGNED NOT NULL DEFAULT 0,
                         PRIMARY KEY (`id`),
                         UNIQUE INDEX `nombre_usuario_UNIQUE` (`nombre_usuario` ASC))
-                        ENGINE = InnoDB;");
-                        
-                        $dbh->exec("CREATE TABLE IF NOT EXISTS `sesion` (
-                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                        `hash_sesion` VARCHAR(255) NOT NULL,
-                        `usuario_id` INT UNSIGNED NOT NULL,
-                        `creada` BIGINT UNSIGNED NOT NULL,
-                        `ultima_visita` BIGINT UNSIGNED NOT NULL,
-                        PRIMARY KEY (`id`),
-                        INDEX `usuario_id_fk_idx` (`usuario_id` ASC),
-                        CONSTRAINT `sesion_usuario_id_fk`
-                        FOREIGN KEY (`usuario_id`)
-                        REFERENCES `usuario` (`id`)
-                        ON DELETE CASCADE
-                        ON UPDATE CASCADE)
                         ENGINE = InnoDB;");
                         
                         $dbh->exec("CREATE TABLE IF NOT EXISTS `nivel` (
@@ -153,41 +164,40 @@ if(isset($_POST['instalar'])){
                         ON UPDATE CASCADE)
                         ENGINE = InnoDB;");
             
-           $crear = true;
-           echo "<div class='alert alert-success'>Creacion de las tablas de la base de datos correcta!</div>";
+           $crear_tablas = true;
+            echo "<div class='alert alert-success'>Creacion de las tablas de la base de datos correcta!</div>";
             
     }  catch (PDOException $e){
-        $crear = false;
+        $crear_tablas = false;
         $error = "Ha ocurrido un error al crear las tablas de la base de datos";
-        echo "<div class='alert alert-danger'>Las contraseñas no coinciden!</div>";
+        echo "<div class='alert alert-danger'>".$error."</div>";
         $dbh->rollBack();
     }
     }
     
+    /* ================== CREACION DEL USUARIO ================== */
+    if($crear_tablas){
+        $administrador = 1;
+        try {
+            $usuarioSQL = $dbh->prepare("INSERT INTO usuario (nombre_completo, nombre_usuario, usuario_pass, administrador) VALUES (:full_name, :user_name,
+                :user_pass, :admin)");
+            $usuarioSQL->bindValue(':full_name', $full_name, PDO::PARAM_STR);
+            $usuarioSQL->bindValue(':user_name', $user_name, PDO::PARAM_STR);
+            $usuarioSQL->bindValue(':user_pass', $user_pass, PDO::PARAM_STR);
+            $usuarioSQL->bindValue(':admin', $administrador, PDO::PARAM_INT);
+            $usuarioSQL->execute();
+            echo "<div class='alert alert-info'>Usuario administrador creado de forma correcta</div>";
+            $crear_usuario = true;
+        } catch (PDOException $e) {
+           $crear_usuario = false;
+           $error = "Ha ocurrido un error al crear el usuario".$e->getMessage();
+           echo "<div class='alert alert-danger'>".$error."</div>";
+           $dbh->rollBack();
+        }
+        }
                         
-                      
-                    
-                    
-    
 }
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <title>Installer</title>
-    </head>
-    <body>
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <a class="navbar-brand" href="#">Installer</a>
-            <p class="navbar-text navbar-right">Developed by <a href="#" class="navbar-link">Juan Antonio Valera</a></p>
-            
-        </nav>
-        <?php
-        
-       var_dump($crear);
-        ?>
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <h3>Información para la instalación de la base de datos</h3>
@@ -235,15 +245,16 @@ if(isset($_POST['instalar'])){
                         margin-top: 80px;
                         margin-bottom: 20px;
                     }
-                    .alert-danger, .alert-success{
-                        margin-top: 50px;
-                    }
                     button{
                         margin: 5px;
                     }
+                    .alert-danger, .alert-info, .alert-success{
+                        margin: 0;
+                    }
+                    
                     .navbar-default{
                         background: #39B3D7;
-                       
+                       margin: 0;
                     }
                     .navbar-default .navbar-brand {
                     color: #fff;
