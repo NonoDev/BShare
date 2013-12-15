@@ -6,12 +6,10 @@ $error = false;
 $conexion = false;
 $crear_tablas = false;
 $crear_usuario = false;
-// Compruebo si el fichero config.php existe.
+$check = false;
+
 
                 if(isset($_POST['instalar'])){
-                    if(file_exists(".\config\config.php")){
-        echo '<div class="alert alert-danger">Ya existe el fichero <strong>config.php</strong>. Se ha abortado la instalación</div>';
-    }else{
                     // =========== RECOGIDA DE DATOS ========== 
                     //Datos de db
                     $host = $_POST['host'];
@@ -23,10 +21,48 @@ $crear_usuario = false;
                     $full_name = $_POST['full_name'];
                     $user_name = $_POST['user_name'];
                     $user_pass = $_POST['user_pass'];
-                    //comprobar contraseñas 
-                    if($_POST['user_pass']!= $_POST['pass_repeat']){
+                    
+                    // ============ VALIDACIÓN DE CAMPOS OBLIGATORIOS 
+                    if(strlen($host) < 1){
+                        $error = "Debe indicar el <strong>servidor</strong> de la base de datos";
+                        $check = false;
+                    }else if(strlen($base) < 1){
+                        $error = "Debe indicar el <strong>nombre</strong> de la base de datos";
+                        $check = false;
+                    }else if(strlen($db_user) < 1){
+                        $error = "Debe indicar el <strong>nombre de usuario</strong> de la base de datos";
+                        $check = false;
+                    }else if(strlen($db_pass) < 1){
+                        $error = "Debe indicar la <strong>contraseña</strong> de la base de datos";
+                        $check = false;
+                    }else if(strlen($user_name) < 1){
+                        $error = "El campo <strong>Nombre de usuario</strong> es obligatorio";
+                        $check = false;  
+                    }else if(strlen($full_name) < 1){
+                        $error = "El campo <strong>Nombre completo</strong> es obligatorio";
+                        $check = false;
+                    }else if(strlen($user_pass) < 5 || strlen($user_pass) > 20){
+                        $error = "El campo <strong>contraseña de usuario</strong> es obligatorio y debe tener entre 4 y 20 caracteres";
+                        $check = false;
+                    }else if($_POST['user_pass']!= $_POST['pass_repeat']){
                         echo "<div class='alert alert-danger'>Las contraseñas no coinciden!</div>";
+                        $check = false;
+                    }else{
+                        $check = true;
                     }
+                    
+                    if($check == false){
+                        echo "<div class='alert alert-danger'>".$error."</div>";
+                    }
+                        
+                   
+                    
+                    if($check == true){
+                    // Compruebo si el fichero config.php existe.
+                    if(file_exists(".\config\config.php")){
+                        echo '<div class="alert alert-danger">Ya existe el fichero <strong>config.php</strong>. Se ha abortado la instalación</div>';
+                    }else{
+                    
                     try{
                     //conexion de base de datos
                     $CFG = array(
@@ -47,7 +83,7 @@ $crear_usuario = false;
                     }
 
 
-                    //creación de las tablas
+                    // ============= CREACION DE LAS TABLAS DE LA BASE DE DATOS ==============
 
                     if($conexion){
                         $dbh->beginTransaction();
@@ -212,6 +248,7 @@ in;
                         }
 
                 }
+          }
     }
 ?>
 <!DOCTYPE html>
@@ -219,11 +256,12 @@ in;
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
         <title>Installer</title>
     </head>
     <body>
         <nav class="navbar navbar-default" role="navigation">
-            <a class="navbar-brand" href="#">Installer</a>
+            <a class="navbar-brand" href="index.php">Instalador</a><a class="navbar-brand" href="info.php">Info</a>
             <p class="navbar-text navbar-right">Developed by <a href="https://github.com/NonoDev" class="navbar-link">Juan Antonio Valera</a></p>
             
         </nav>
@@ -250,7 +288,7 @@ in;
             <label for="full_name">Nombre completo</label>
             <input class="form-control" type="text" name="full_name" id="full_name" placeholder="Nombre completo del usuario"><br/>
             <label for="user_pass">Contraseña de usuario</label>
-            <input class="form-control" type="password" name="user_pass" id="user_pass" placeholder="Contraseña de usuario"><br/>
+            <input class="form-control" type="password" name="user_pass" id="user_pass" placeholder="Contraseña de usuario. Entre 6 y 20 caracteres"><br/>
             <label for="pass_repeat">Repite la contraseña</label>
             <input class="form-control" type="password" name="pass_repeat" id="pass_repeat" placeholder="Repite la contraseña"><br/>
             <label for="email">Correo electrónico</label>
@@ -265,36 +303,38 @@ in;
             
             </div>
         </div>
+        <!-- Chuminada de los colores -->
+        <div class="colors">
+            <form action="index.php" method="post">
+                <button type="submit" name="c1" class="color" id="c1"></button>
+                <button type="submit" name="c2" class="color" id="c2"></button>
+                <button type="submit" name="c3" class="color" id="c3"></button>
+                <button type="submit" name="c4" class="color" id="c4"></button>
+                <button type="submit" name="c5" class="color" id="c5"></button>
+                <button type="submit" name="c6" class="color" id="c6"></button>
+            </form>
+        </div>
         </form>
-                <style type="text/css">
-                    .row{
-                        margin: 0 auto;
-                    }
-                    h3{
-                        text-align: center;
-                        margin-top: 80px;
-                        margin-bottom: 20px;
-                    }
-                    button{
-                        margin: 5px;
-                    }
-                    .alert-danger, .alert-info, .alert-success{
-                        margin: 0;
-                    }
-
-                    
-                    .navbar-default{
-                        background: #39B3D7;
-                       margin: 0;
-                    }
-                    .navbar-default .navbar-brand {
-                    color: #fff;
-                    }
-                    .navbar-default .navbar-text {
-                    color: #fff;
-                    }
-                    
-                   
-                </style>
+          <?php
+                if(isset($_POST['c1'])){
+                    echo '<style type="text/css">.navbar-default{background: #2ECC71;}</style>';
+                }
+                if(isset($_POST['c2'])){
+                    echo '<style type="text/css">.navbar-default{background: #9B59B6;}</style>';
+                }
+                if(isset($_POST['c3'])){
+                    echo '<style type="text/css">.navbar-default{background: #F1C40F;}</style>';
+                }
+                if(isset($_POST['c4'])){
+                    echo '<style type="text/css">.navbar-default{background: #E74C3C;}</style>';
+                }
+                if(isset($_POST['c5'])){
+                    echo '<style type="text/css">.navbar-default{background: #39B3D7;}</style>';
+                }
+                if(isset($_POST['c6'])){
+                    echo '<style type="text/css">.navbar-default{background: #95A5A6;}</style>';
+                }
+          ?>
+               
     </body>
 </html>

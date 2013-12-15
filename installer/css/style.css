@@ -1,0 +1,57 @@
+.colors{
+    position: fixed;
+    right: 15px;
+    bottom: 10px;
+}
+.color{
+    width: 10px;
+    height: 10px;
+    float: left;
+    background: blue;
+    border-radius: 50% 50%;
+    border: none;
+}
+.row{
+    margin: 0 auto;
+}
+h3{
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+button{
+    margin: 5px;
+}
+.alert-danger, .alert-info, .alert-success{
+    margin: 0;
+}
+
+
+.navbar-default{
+    background: #39B3D7;
+    margin: 0;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+.navbar-default .navbar-text {
+    color: #fff;
+}
+#c1{
+    background: #2ECC71;
+}
+#c2{
+    background: #9B59B6;
+}
+#c3{
+    background: #F1C40F;
+}
+#c4{
+    background: #E74C3C;
+}
+#c5{
+    background: #39B3D7;
+}
+#c6{
+    background: #95A5A6;
+}
