@@ -260,15 +260,19 @@ in;
         <title>Installer</title>
     </head>
     <body>
-        <nav class="navbar navbar-default" role="navigation">
-            <a class="navbar-brand" href="index.php">Instalador</a><a class="navbar-brand" href="info.php">Info</a>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <a class="navbar-brand" href="index.php">Instalador</a><a class="navbar-brand" href="info.php">Info y uso</a>
             <p class="navbar-text navbar-right">Developed by <a href="https://github.com/NonoDev" class="navbar-link">Juan Antonio Valera</a></p>
             
         </nav>
        
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                <h3>Información para la instalación de la base de datos</h3>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Información para la instalación de la base de datos</h3>
+                    </div>
+                    <div class="panel-body">
         <form actio="index.php" method="post" role="form">
             <div class="form-group">
             <label for="host">Host</label>
@@ -280,8 +284,13 @@ in;
             <label for="pass">Contraseña</label>
             <input class="form-control" type="password" name="pass" id="user_pass" placeholder="Contraseña de acceso a la base de datos"><br/>
             </div>
-            <hr/>
-            <h3>Información de usuario</h3>
+                    </div>
+                    </div>
+            <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Información de usuario</h3>
+             </div>
+                <div class="panel-body">
             <div class="form-group">
             <label for="user_name">Nombre de usuario</label>
             <input class="form-control" type="text" name="user_name" id="user_name" placeholder="Nombre de usuario con privilegios de administrador en la aplicación"><br/>
@@ -300,7 +309,7 @@ in;
               
        
                 </div>
-            
+               </div>
             </div>
         </div>
         <!-- Chuminada de los colores -->
@@ -316,24 +325,24 @@ in;
         </div>
         </form>
           <?php
-                if(isset($_POST['c1'])){
-                    echo '<style type="text/css">.navbar-default{background: #2ECC71;}</style>';
+                if (isset($_POST['c1'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #2ECC71;}</style>';
                 }
-                if(isset($_POST['c2'])){
-                    echo '<style type="text/css">.navbar-default{background: #9B59B6;}</style>';
+                if (isset($_POST['c2'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #9B59B6;}</style>';
                 }
-                if(isset($_POST['c3'])){
-                    echo '<style type="text/css">.navbar-default{background: #F1C40F;}</style>';
+                if (isset($_POST['c3'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #F1C40F;}</style>';
                 }
-                if(isset($_POST['c4'])){
-                    echo '<style type="text/css">.navbar-default{background: #E74C3C;}</style>';
+                if (isset($_POST['c4'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #E74C3C;}</style>';
                 }
-                if(isset($_POST['c5'])){
-                    echo '<style type="text/css">.navbar-default{background: #39B3D7;}</style>';
+                if (isset($_POST['c5'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #39B3D7;}</style>';
                 }
-                if(isset($_POST['c6'])){
-                    echo '<style type="text/css">.navbar-default{background: #95A5A6;}</style>';
-                }
+                if (isset($_POST['c6'])) {
+                    echo '<style type="text/css">.navbar-default, .panel-default > .panel-heading{background: #95A5A6;}</style>';
+}
           ?>
                
     </body>

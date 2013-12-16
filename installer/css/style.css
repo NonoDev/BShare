@@ -16,8 +16,7 @@
 }
 h3{
     text-align: center;
-    margin-top: 80px;
-    margin-bottom: 20px;
+    
 }
 button{
     margin: 5px;
@@ -25,7 +24,9 @@ button{
 .alert-danger, .alert-info, .alert-success{
     margin: 0;
 }
-
+.alert-danger,.alert-success{
+    margin-top: 50px;
+}
 
 .navbar-default{
     background: #39B3D7;
@@ -54,4 +55,15 @@ button{
 }
 #c6{
     background: #95A5A6;
+}
+
+.panel-default{
+    margin-top: 80px;
+}
+.panel-default > .panel-heading{
+    background: #39B3D7;
+    color: #fff;
+}
+.panel-title{
+    font-size: 22px;
 }
