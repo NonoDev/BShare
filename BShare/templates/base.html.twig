@@ -1,10 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inicio</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Blank -->
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="/css/default.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="index.html">BShare</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                
+                   
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> Nombre de Usuario <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="blue"><i class="fa fa-user fa-fw"></i> Perfil</a>
+                        </li>
+                        <li><a href="#" class="green"><i class="fa fa-gear fa-fw"></i> Gestión de usuarios</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html" class="red"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+        </nav>
+        <!-- /.navbar-static-top -->
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="index.html" class="red"><i class="fa fa-home"></i> Inicio</a>
+                    </li>
+                    <li>
+                        <a href="#" class="blue"><i class="fa fa-plus-square"></i> Altas<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#">Opcion 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 2</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <a href="#" class="green"><i class="fa fa-reply-all"></i> Devoluciones</a>
+                    </li>
+                    <li>
+                        <a href="#" class="orange"><i class="fa fa-share"></i> Entrega</a>
+                    </li>
+                    <li>
+                        <a href="#" class="purple"><i class="fa fa-calendar-o"></i> Historial<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#">Opcion 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 2</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 3</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 4</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 5</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <a href="#" class="oblue"><i class="fa fa-book"></i> Ejemplares<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#">Opcion 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Opcion 2</a>
+                            </li>
+                            <li>
+                                <a href="#">Menu tercer nivel <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="#">Opcion 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Opcion 2</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-third-level -->
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                    <li class="active">
+                        <a href="#" class="red"><i class="fa fa-pencil-square"></i> Contacto</span></a>
+                    </li>
+                </ul>
+                <!-- /#side-menu -->
+            </div>
+            <!-- /.sidebar-collapse -->
+        </nav>
+        <!-- /.navbar-static-side -->
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block contenido %}
+                    {% endblock %}
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <a href="https://github.com/NonoDev"><i class="fa fa-github"></i></a>
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.metisMenu.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Blank -->
+
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Blank - Use for reference -->
+
+
+</body>
+
+</html>
+
 <html>
     <head>
         <meta charset="utf-8">
         <title>Titulo</title>
     </head>
     <body>
-        {% block contenido %}
-        {% endblock %}
+        
     </body>
 </html>
