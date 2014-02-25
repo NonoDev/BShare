@@ -41,7 +41,7 @@ $app->get('/', function() use ($app) {
     $app->get('/salir', function() use ($app) {
         unset($_SESSION);
         session_destroy();
-        $app->redirect('/');
+        $app->render('login.html.twig');
     })->name('Salir');
 
 /* ============================= INICIO ==========================*/
@@ -95,11 +95,25 @@ $app->post('/', function() use ($app) {
         $nuevo_user->nombre_usuario = $_POST['nombre_user'];
         $nuevo_user->nombre_completo = $_POST['full_name'];
         $nuevo_user->usuario_pass = $_POST['pass'];
-        $nuevo_user->administrador = $_POST['nombre_user'];
+        $nuevo_user->administrador = $_POST['user'];
         $nuevo_user->save();
+        
+        $app->render('gestion_usuarios.html.twig', array('alertaUsuario' => "Usuario creado correctamente",));
+        }  else {
+        $app->render('nuevo_usuario.html.twig', array('alertaMalUsuario' => "Error al crear usuario",));
         }
         
-        $app->render('gestion_usuarios.html.twig', array('errorLogin' => "Usuario creado correctamente",));
+         if(isset($_POST['borrar_user'])){
+            $user = ORM::for_table('usuario')->find_one($_POST['borrar_user']);
+            $user->delete();
+            
+            $app->redirect($app->router()->urlFor('listado_usuarios'));
+            }
+            else{
+            $app->render('listado_usuarios.html.twig', array('alertaNoBorrarUsuario' => "Fallo al borrar el usuario",));
+            }
+        
+        
    
 });
 
@@ -118,7 +132,12 @@ $app->post('/', function() use ($app) {
     
     // Listados de usuarios
     $app->get('/listado_usuarios', function() use ($app) {
-        $app->render('listado_usuarios.html.twig',array('usuario' => $_SESSION['Admin'] ));
+        $listado = ORM::for_table('usuario')->find_many();
+        $app->render('listado_usuarios.html.twig',array(
+            'usuario' => $_SESSION['Admin'],
+            'users' => $listado
+       ));
+        
     })->name('listado_usuarios');
     
     // Nuevos usuarios

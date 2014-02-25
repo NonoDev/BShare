@@ -1,5 +1,46 @@
 {% extends "base.html.twig" %}
 {% block contenido %}
-        <h1 class="page-header">Listado de usuarios</h1>
-                    
+<style type="text/css">
+.btn-circle.btn-xl{
+            float: left;
+            width: 80px;
+            height: 40px;
+            border-radius: 0;
+            font-size: 18px;
+            color: #fff;
+            padding: 2px 25px;
+            margin-right: 2%;
+            }
+            .btn-danger{
+                background: #FA3031;
+            }
+            .btn-warning{
+                background: #F88529;
+                }
+    </style>
+<h1 class="page-header">Listado de usuarios</h1>
+<form class="form-horizontal" role="form" method="post" action="/">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nº</th><th>Usuario</th><th>Nombre completo</th><th>Administrador</th><th>Acciones</th>
+            </tr>
+        <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.nombre_usuario }}</td>
+                    <td>{{user.nombre_completo }}</td>
+                    <td>{{user.administrador }}</td>
+                    <td>
+                        <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="borrar_user" title="Borrar usuario" value="{{ user.id }}"><i class="fa fa-eraser"></i>
+                        <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" name="edit_user" title="Editar usuario" name="crear_user"><i class="fa fa-cogs"></i></button>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+            </thead>
+        </table>
+    </form>
         {% endblock %}
