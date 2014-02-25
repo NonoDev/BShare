@@ -1,5 +1,29 @@
 {% extends "base.html.twig" %}
 {% block contenido %}
+<style type="text/css">
+        .btn-circle.btn-xl{
+            float: left;
+            width: 70px;
+            height: 70px;
+            padding: 60px 66px;
+            border-radius: 0;
+            font-size: 24px;
+            color: #fff;
+            margin: 3%;
+            }
+    </style>
         <h1 class="page-header">Gestión de usuarios</h1>
-            
+        
+        <div class="row">
+        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+            <a href="{{ urlFor('nuevo_usuario') }}" id="tooltip" role="button" class="btn btn-success btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Nuevo usuario"><i class="fa fa-archive"></i>
+                            </a>
+        <a href="{{ urlFor('listado_usuarios') }}" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Listado de usuarios"><i class="fa fa-bars"></i>
+                            </a>
+        <a href="{{ urlFor('modificar_usuarios') }}" id="tooltip2" role="button" type="button" class="btn btn-warning btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Modificación de usuarios"><i class="fa fa-cogs"></i>
+                            </a>
+        <a href="{{ urlFor('inicio') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a inicio"><i class="fa fa-arrow-left"></i>
+                            </a>
+             </div>
+        </div>
         {% endblock %}

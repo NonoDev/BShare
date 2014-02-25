@@ -149,7 +149,7 @@ font-size: 25px;
 	padding: 5px 10px;
 	border: none;
 }
-.btn:hover{
+#login:hover{
 	text-decoration: none;
 	background-color: #52B9E9;
 	color: #fff;
