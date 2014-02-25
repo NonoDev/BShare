@@ -43,8 +43,9 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="#" class="blue"><i class="fa fa-user fa-fw"></i> Perfil</a>
                         </li>
-                        <li><a href="{{ urlFor('gestion') }}" class="green"><i class="fa fa-gear fa-fw"></i> Gestión de usuarios</a>
+                        {% if usuario['administrador'] == 1 %}<li><a href="{{ urlFor('gestion') }}" class="green"><i class="fa fa-gear fa-fw"></i> Gestión de usuarios</a>
                         </li>
+                        {% endif %}
                         <li class="divider"></li>
                         <li><a href="{{ urlFor('Salir') }}" class="red"><i class="fa fa-sign-out fa-fw"></i> Salir</a>
                         </li>

@@ -67,10 +67,7 @@ $app->post('/', function() use ($app) {
             
       if (isset($_POST['login'])){
           $usuario = ORM::for_table('usuario')->where('nombre_usuario', $_POST['user'])->where('usuario_pass', $_POST['pass'])->find_one();
-
-      }  
-      
-      if ($usuario){
+            if ($usuario){
           if($usuario['administrador']==1){
               //Tendrá acceso a "administrar" y cerrar sesion
                 $_SESSION['Admin'] = $usuario;
@@ -87,6 +84,22 @@ $app->post('/', function() use ($app) {
       else{
           $app->render('login.html.twig', array('errorLogin' => "Usuario o contraseña incorrectos",));
       }
+      }  
+      
+      
+      
+     // Crear usuario
+      if(isset($_POST['crear_user'])){
+        $nuevo_user = ORM::for_table('usuario')->create();  // preparo la consulta
+        
+        $nuevo_user->nombre_usuario = $_POST['nombre_user'];
+        $nuevo_user->nombre_completo = $_POST['full_name'];
+        $nuevo_user->usuario_pass = $_POST['pass'];
+        $nuevo_user->administrador = $_POST['nombre_user'];
+        $nuevo_user->save();
+        }
+        
+        $app->render('gestion_usuarios.html.twig', array('errorLogin' => "Usuario creado correctamente",));
    
 });
 
@@ -112,6 +125,8 @@ $app->post('/', function() use ($app) {
     $app->get('/nuevo_usuario', function() use ($app) {
         $app->render('nuevo_usuario.html.twig',array('usuario' => $_SESSION['Admin'] ));
     })->name('nuevo_usuario');
+    
+    
 
 
 //arrancamos Slim

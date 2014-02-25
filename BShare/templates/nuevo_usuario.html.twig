@@ -37,33 +37,36 @@
                         <div class="form-group">
                           <label for="nombre_usuario" class="col-sm-2 control-label">Nombre de usuario</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nombre_usuario" placeholder="Usuario">
+                            <input type="text" class="form-control" id="nombre_usuario" name="nombre_user" placeholder="Usuario">
                           </div>
                         </div>
                     <div class="form-group">
                           <label for="full_name" class="col-sm-2 control-label">Nombre completo</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="full_name" placeholder="Nombre completo">
+                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Nombre completo">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="pass" class="col-sm-2 control-label">Contraseña</label>
                           <div class="col-sm-10">
-                            <input type="password" class="form-control" id="pass" placeholder="Contraseña">
+                            <input type="password" class="form-control" name="pass" id="pass" placeholder="Contraseña">
                           </div>
                         </div>
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                              <label>
-                                <input type="checkbox"> ¿Administrador?
+                            <label class="col-sm-offset-0 control-label">Administrador</label>
+                            <label class="checkbox-inline">
+                                <input type="radio" id="inlineCheckbox1" value="1" name="user"> Si
                               </label>
-                            </div>
+                              <label class="checkbox-inline">
+                                <input type="radio" id="inlineCheckbox2" value="2" name="user" checked> No
+                              </label>
+                              
                           </div>
                         </div>
                         <div class="form-group">
                           <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Crear usuario"><i class="fa fa-upload"></i></button>
+                            <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Crear usuario" name="crear_user"><i class="fa fa-upload"></i></button>
                           </div>
                         </div>
                      
