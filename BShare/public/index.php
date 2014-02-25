@@ -98,22 +98,41 @@ $app->post('/', function() use ($app) {
         $nuevo_user->administrador = $_POST['user'];
         $nuevo_user->save();
         
-        $app->render('gestion_usuarios.html.twig', array('alertaUsuario' => "Usuario creado correctamente",));
-        }  else {
-        $app->render('nuevo_usuario.html.twig', array('alertaMalUsuario' => "Error al crear usuario",));
-        }
+        $app->redirect($app->router()->urlFor('gestion'));
+        }  
         
+        // Borrar usuarios
          if(isset($_POST['borrar_user'])){
             $user = ORM::for_table('usuario')->find_one($_POST['borrar_user']);
             $user->delete();
             
+            
+            }
+            
+        
+        // Editar usuarios
+            if(isset($_POST['edit_usuario'])){
+            $modificar = ORM::for_table('usuario')->find_one($_POST['edit_usuario']);
+            $app->render('modificar_usuario.html.twig',array(
+            'usuario' => $_SESSION['Admin'], 
+            'modificar_user' => $modificar  
+                    ));
+            }
+           
+        if(isset($_POST['actualizar2'])){
+            $modificar = ORM::for_table('usuario')->find_one($_POST['actualizar2']);
+            $modificar->nombre_usuario = $_POST['nombre_user'];
+            $modificar->nombre_completo = $_POST['full_name'];
+            $modificar->usuario_pass = $_POST['pass'];
+            $modificar->administrador = $_POST['user'];
+            $modificar->save();
+            
             $app->redirect($app->router()->urlFor('listado_usuarios'));
+              
+               
+
             }
-            else{
-            $app->render('listado_usuarios.html.twig', array('alertaNoBorrarUsuario' => "Fallo al borrar el usuario",));
-            }
-        
-        
+           
    
 });
 
@@ -126,9 +145,9 @@ $app->post('/', function() use ($app) {
     })->name('gestion');
    
     // Modificacion de usuarios
-    $app->get('/modificar_usuario', function() use ($app) {
+   /* $app->get('/modificar_usuario', function() use ($app) {
         $app->render('modificar_usuario.html.twig',array('usuario' => $_SESSION['Admin'] ));
-    })->name('modificar_usuarios');
+    })->name('modificar_usuarios');*/
     
     // Listados de usuarios
     $app->get('/listado_usuarios', function() use ($app) {

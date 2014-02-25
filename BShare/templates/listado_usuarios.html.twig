@@ -8,7 +8,7 @@
             border-radius: 0;
             font-size: 18px;
             color: #fff;
-            padding: 2px 25px;
+            padding: 8px 25px;
             margin-right: 2%;
             }
             .btn-danger{
@@ -33,8 +33,8 @@
                     <td>{{user.nombre_completo }}</td>
                     <td>{{user.administrador }}</td>
                     <td>
-                        <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="borrar_user" title="Borrar usuario" value="{{ user.id }}"><i class="fa fa-eraser"></i>
-                        <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" name="edit_user" title="Editar usuario" name="crear_user"><i class="fa fa-cogs"></i></button>
+                        <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="borrar_user" title="Borrar usuario" value="{{ user.id }}"><i class="fa fa-eraser"></i></button>
+                        <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" name="edit_usuario" title="Editar usuario" value="{{ user['id'] }}"><i class="fa fa-cogs"></i></button>
                     </td>
                 </tr>
 
@@ -42,5 +42,6 @@
             </tbody>
             </thead>
         </table>
+        <a href="{{ urlFor('gestion') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a gestión de usuarios"><i class="fa fa-arrow-left"></i></a>
     </form>
         {% endblock %}
