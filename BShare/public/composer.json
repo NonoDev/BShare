@@ -1,0 +1,9 @@
+{
+    "require": {
+        "j4mie/idiorm": "1.4.*",
+        "j4mie/paris": "1.4.*",
+        "slim/slim": "2.3.*",
+        "slim/views": "0.*",
+        "twig/twig": "1.*"
+    }
+}
