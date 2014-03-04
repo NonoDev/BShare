@@ -25,20 +25,22 @@
                     border-bottom-color: #52B9E9;
                     }
     </style>
-<h1 class="page-header">Listado de usuarios</h1>
+<h1 class="page-header">Listado de ejemplares no devueltos</h1>
 <form class="form-horizontal" role="form" method="post" action="/">
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Nº</th><th>Usuario</th><th>Nombre completo</th><th>Administrador</th><th>Acciones</th>
+                <th>Código</th><th>Nombre</th><th>Editorial</th><th>Año</th><th>ISBN</th><th>Acciones</th>
             </tr>
         <tbody>
-                {% for user in users %}
+                {% for list in list_dev %}
                 <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.nombre_usuario }}</td>
-                    <td>{{user.nombre_completo }}</td>
-                    <td>{% if user.administrador == 1 %} Si {% else %} No {% endif %}</td>
+                    <td>{{list.codigo}}</td>
+                    <td>{{list.titulo }}</td>
+                    <td>{{list.autor }}</td>
+                    <td>{{list.anio}}</td>
+                    <td>{{list.isbn}}</td>
+                    
                     <td>
                         <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="borrar_user" title="Borrar usuario" value="{{ user.id }}"><i class="fa fa-eraser"></i></button>
                         <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" name="edit_usuario" title="Editar usuario" value="{{ user['id'] }}"><i class="fa fa-cogs"></i></button>
@@ -49,6 +51,6 @@
             </tbody>
             </thead>
         </table>
-        <a href="{{ urlFor('gestion') }}" role="button" id="tooltip1" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a gestión de usuarios"><i class="fa fa-arrow-left"></i></a>
+        <a href="{{ urlFor('inicio') }}" role="button" id="tooltip1" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a inicio"><i class="fa fa-arrow-left"></i></a>
     </form>
         {% endblock %}

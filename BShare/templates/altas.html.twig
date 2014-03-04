@@ -1,0 +1,148 @@
+{% extends "base.html.twig" %}
+{% block contenido %}
+<script type="text/javascript">
+     muestraDatos();
+
+    function rellenaSelect(niveles) {
+        var aRellenar = document.getElementById("curso");
+        
+        var j = 1; 
+        for (var i = 0; i < niveles.length; i++) {
+            
+            var d = niveles[i].nombre;
+            console.log(d);
+            aRellenar.options.add(new Option(d,i));
+        }
+    }
+
+    function creaXmlHttpRequest() {
+        var xmlHttp;
+        if (window.XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest();
+        }
+        else {
+            if (window.ActiveXObject) {
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+        }
+        return xmlHttp;
+    }
+
+    function muestraDatos() {
+        conexion = creaXmlHttpRequest();
+        // url = escape("http://www.gpalomares.com.es/daw/quiniela.php?opcion=1");
+        conexion.open("GET", "/muestraCursos?muestra=cursos", true);
+        conexion.onreadystatechange = devuelveConsulta;
+        conexion.send();
+    }
+
+    function devuelveConsulta() {
+        if (conexion.readyState == 4 /* && conexion.status==200*/) {
+            nivel = conexion.responseText;
+            nivel = JSON.parse(nivel);
+            rellenaSelect(nivel);
+        }
+        else {
+            //resp.innerHTML = "...Cargando...";
+        }
+    }
+    </script>
+                   <style type="text/css">
+        .panel{
+            border-radius: 0;
+            }
+            .panel-default > .panel-heading {
+            color: #fff;
+            background-color: #52B9E9;
+            border-color: #ddd;
+            }
+.btn-circle.btn-xl{
+            float: left;
+            width: 80px;
+            height: 40px;
+            border-radius: 0;
+            font-size: 18px;
+            color: #fff;
+            padding: 8px 25px;
+            margin-right: 2%;
+            }
+            .btn-danger{
+                background: #FA3031;
+            }
+            .btn-warning{
+                background: #F88529;
+                }
+            textarea{
+            margin-bottom: 10px;    
+            }
+                
+          
+    </style>
+    
+        <h1 class="page-header">Altas de libros</h1>
+        
+         <form class="form-horizontal" role="form" method="post" action="/">
+             
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-plus-square"></i> Altas de libros</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                          <label for="curso" class="col-sm-2 control-label">Curso</label>
+                          <div class="col-sm-10">
+                              <select class="form-control" id="curso">
+                                  <option></option>
+                              
+                              </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="asignatura" class="col-sm-2 control-label">Asignatura</label>
+                          <div class="col-sm-10">
+                              <select class="form-control" id="asignatura">
+                                  <option></option>
+                              
+                              </select>
+                          </div>
+                        </div>
+                    <div class="form-group">
+                          <label for="libros" class="col-sm-2 control-label">Libros</label>
+                          <div class="col-sm-10">
+                              <select class="form-control" id="titulo">
+                                  <option></option>
+                              
+                              </select>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="autor" class="col-sm-2 control-label">Editorial o autor</label>
+                          <div class="col-sm-10">
+                              <input type="text" class="form-control" id="autor" name="autor" value="">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="isbn" class="col-sm-2 control-label">ISBN</label>
+                          <div class="col-sm-10">
+                              <input type="text" class="form-control" id="isbn" name="isbn" value="">
+                          </div>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="anio" class="col-sm-2 control-label">Año</label>
+                          <div class="col-sm-10">
+                              <input type="text" class="form-control" id="anio" name="anio" value="">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Actualizar cambios" name="alta" value=""><i class="fa fa-upload"></i></button>
+                          </div>
+                        </div>
+                     
+                </div>
+            </div>
+            <a href="{{ urlFor('inicio') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a inicio"><i class="fa fa-arrow-left"></i>
+                            </a>
+            <a href="" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir a listado de libros"><i class="fa fa-arrow-right"></i></a>
+        {% endblock %}

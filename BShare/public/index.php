@@ -3,7 +3,7 @@
 include "../vendor/autoload.php";
 require_once '../config.php';
 
-//configuracion
+// Configuración
 $app = new \Slim\Slim(
         array(
             'view' => new \Slim\Views\Twig(),
@@ -26,7 +26,7 @@ $view->parserExtensions = array(
     new \Slim\Views\TwigExtension(),
 );
 
-// inicio de sesión
+// Inicio de sesión
 session_cache_limiter(false);
 session_start();
 
@@ -37,7 +37,7 @@ $app->get('/', function() use ($app) {
     $app->render('login.html.twig');
 })->name('login');
 
-//Cuando pulsamos en "cerrar sesión"
+//Cuando pulsamos en "cerrar sesión" cerramos sesión y vaciamos la variable, redireccionando al login
     $app->get('/salir', function() use ($app) {
         unset($_SESSION);
         session_destroy();
@@ -47,19 +47,14 @@ $app->get('/', function() use ($app) {
 /* ============================= INICIO ==========================*/
 //Página de inicio de la aplicación
 $app->get('/inicio', function() use ($app) {
-    if(!isset($_SESSION['Admin']) && !isset($_SESSION['NoAdmin'])){
-         unset($_SESSION);
-        
-         $app->render('inicio.html.twig', array('NoAdmin' => 'Entrar'));
-     }
-    else{
+    
         if(($_SESSION['AdminCount'])==1){
             $app->render('inicio.html.twig',array('usuario' => $_SESSION['Admin'] ));
         }
         else{
             $app->render('inicio.html.twig',array('usuario' => $_SESSION['NoAdmin'] ));
         }
-    } 
+    
 })->name('inicio');
 
 //Al pulsar el boton de entrar
@@ -69,13 +64,13 @@ $app->post('/', function() use ($app) {
           $usuario = ORM::for_table('usuario')->where('nombre_usuario', $_POST['user'])->where('usuario_pass', $_POST['pass'])->find_one();
             if ($usuario){
           if($usuario['administrador']==1){
-              //Tendrá acceso a "administrar" y cerrar sesion
+              //Si el usuario consta en la base de datos como admin, tendrá acceso a la gestión de usuarios
                 $_SESSION['Admin'] = $usuario;
                 $_SESSION['AdminCount'] = 1;
               $app->render('inicio.html.twig',array('usuario' => $usuario ));        
           }
           else{
-              //Tendrá acceso a cerrar sesion    
+              // Si no, sólo a su perfil    
                 $_SESSION['NoAdmin'] = $usuario;
                 $_SESSION['AdminCount'] = 2;
               $app->render('inicio.html.twig',array('usuario' => $usuario ));          
@@ -102,11 +97,11 @@ $app->post('/', function() use ($app) {
         }  
         
         // Borrar usuarios
-         if(isset($_POST['borrar_user'])){
+            if(isset($_POST['borrar_user'])){
             $user = ORM::for_table('usuario')->find_one($_POST['borrar_user']);
             $user->delete();
             
-            
+            $app->redirect($app->router()->urlFor('listado_usuarios'));
             }
             
         
@@ -118,7 +113,8 @@ $app->post('/', function() use ($app) {
             'modificar_user' => $modificar  
                     ));
             }
-           
+        
+        
         if(isset($_POST['actualizar2'])){
             $modificar = ORM::for_table('usuario')->find_one($_POST['actualizar2']);
             $modificar->nombre_usuario = $_POST['nombre_user'];
@@ -132,6 +128,8 @@ $app->post('/', function() use ($app) {
                
 
             }
+            
+         
            
    
 });
@@ -141,7 +139,8 @@ $app->post('/', function() use ($app) {
    
     // Gestion de usuarios
     $app->get('/gestion', function() use ($app) {
-        $app->render('gestion_usuarios.html.twig',array('usuario' => $_SESSION['Admin'] ));
+        
+        $app->render('gestion_usuarios.html.twig',array('usuario' => $_SESSION['Admin']));
     })->name('gestion');
    
     // Modificacion de usuarios
@@ -159,13 +158,60 @@ $app->post('/', function() use ($app) {
         
     })->name('listado_usuarios');
     
+    
     // Nuevos usuarios
     $app->get('/nuevo_usuario', function() use ($app) {
         $app->render('nuevo_usuario.html.twig',array('usuario' => $_SESSION['Admin'] ));
     })->name('nuevo_usuario');
     
+/* ====================== ALTAS ======================= */
+    $app->get('/altas', function() use ($app) {
+        $app->render('altas.html.twig',array('usuario' => $_SESSION['Admin'] ));
+    })->name('altas');
+
     
-
-
+/* ================= CONTACTO ================== */
+    $app->get('/contacto', function() use ($app) {
+        $app->render('contacto.html.twig',array('usuario' => $_SESSION['Admin'] ));
+    })->name('contacto');
 //arrancamos Slim
+    
+    $app->get('/muestraCursos', function() use ($app) {
+                
+            if ($_GET['muestra'] == 'cursos') {
+                $cursos = ORM::for_table('nivel')->select('nombre')->find_array();
+                print_r(json_encode($cursos));
+               /* $i = 0;
+                $arr = array();
+                foreach ($cursos as $j) {
+                    $arr[$i] = $j->nombre;
+                    $i = $i + 1;
+                }
+                print_r(json_encode($arr));*/
+            }
+        })->name('muestraCursos');
+        
+/* ================== LISTADO DEVUELTOS =================== */
+        $app->get('/listado_devueltos', function() use ($app) {
+           $list_dev = ORM::forTable('libro')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->find_array();
+        $app->render('listado_devueltos.html.twig',array(
+            'usuario' => $_SESSION['Admin'],
+            'list_dev' => $list_dev
+                    ));
+    })->name('listado_devueltos');
+    
+    /* ================== LISTADO NO DEVUELTOS =================== */
+        $app->get('/listado_no_devueltos', function() use ($app) {
+           $list_dev = ORM::forTable('libro')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->find_array();
+        $app->render('listado_no_devueltos.html.twig',array(
+            'usuario' => $_SESSION['Admin'],
+            'list_dev' => $list_dev
+                    ));
+    })->name('listado_no_devueltos');
 $app->run();

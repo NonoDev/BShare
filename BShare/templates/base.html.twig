@@ -41,8 +41,7 @@
                         <i class="fa fa-user fa-fw"></i> {{ usuario['nombre_completo'] }} <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#" class="blue"><i class="fa fa-user fa-fw"></i> Perfil</a>
-                        </li>
+                       
                         {% if usuario['administrador'] == 1 %}<li><a href="{{ urlFor('gestion') }}" class="green"><i class="fa fa-gear fa-fw"></i> Gestión de usuarios</a>
                         </li>
                         {% endif %}
@@ -65,14 +64,23 @@
                     <li>
                         <a href="{{ urlFor('inicio') }}" class="red"><i class="fa fa-home"></i> Inicio</a>
                     </li>
-                    <li>
-                        <a href="#" class="blue"><i class="fa fa-plus-square"></i> Altas<span class="fa arrow"></span></a>
+                   <li>
+                        <a href="#" class="blue"><i class="fa fa-book"></i> Libros<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">Opcion 1</a>
+                                <a href="{{ urlFor('altas') }}">Altas</a>
                             </li>
                             <li>
-                                <a href="#">Opcion 2</a>
+                                <a href="#">Listados <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <a href="{{ urlFor('listado_devueltos') }}">Listado de ejemplares devueltos</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ urlFor('listado_no_devueltos') }}">Listado de ejemplares no devueltos</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-third-level -->
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -104,32 +112,9 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li>
-                        <a href="#" class="oblue"><i class="fa fa-book"></i> Ejemplares<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Opcion 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Opcion 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Menu tercer nivel <span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="#">Opcion 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Opcion 2</a>
-                                    </li>
-                                </ul>
-                                <!-- /.nav-third-level -->
-                            </li>
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    
                     <li class="active">
-                        <a href="#" class="red"><i class="fa fa-pencil-square"></i> Contacto</span></a>
+                        <a href="{{ urlFor('contacto') }}" class="red"><i class="fa fa-pencil-square"></i> Contacto</span></a>
                     </li>
                 </ul>
                 <!-- /#side-menu -->
