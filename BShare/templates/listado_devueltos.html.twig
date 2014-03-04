@@ -24,8 +24,44 @@
                 thead{
                     border-bottom-color: #52B9E9;
                     }
+                    #form1{
+                        margin-bottom: 20px;
+                        
+                        }
+                        #form1 button{
+                            
+                            color: #ffffff;
+                            padding: 7px 25px;
+                        }
+                        
     </style>
 <h1 class="page-header">Listado de ejemplares devueltos</h1>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+<form class="form-inline" role="form" method="post" action="/" id="form1">
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+    <select class="form-control">
+        
+        <option>Asignatura</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword2">Password</label>
+    <select class="form-control">
+        <option>Curso</option>
+    </select>
+  </div>
+        <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword2">Password</label>
+    <select class="form-control">
+        <option>Alumno</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-success" style="display: inline-block">Sign in</button>
+</form>
+        </div>
+    </div>
 <form class="form-horizontal" role="form" method="post" action="/">
     <table class="table table-hover">
         <thead>
