@@ -195,6 +195,7 @@ $app->post('/', function() use ($app) {
         $app->get('/listado_devueltos', function() use ($app) {
            $list_dev = ORM::forTable('libro')
             ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->where_null('ejemplar.alumno_nie')
             ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
             ->find_array();
         $app->render('listado_devueltos.html.twig',array(
@@ -207,6 +208,7 @@ $app->post('/', function() use ($app) {
         $app->get('/listado_no_devueltos', function() use ($app) {
            $list_dev = ORM::forTable('libro')
             ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->where_not_null('ejemplar.alumno_nie')
             ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
             ->find_array();
         $app->render('listado_no_devueltos.html.twig',array(
