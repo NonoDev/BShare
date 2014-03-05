@@ -124,13 +124,35 @@ $app->post('/', function() use ($app) {
             $modificar->save();
             
             $app->redirect($app->router()->urlFor('listado_usuarios'));
-              
-               
-
             }
             
-         
+            // ===================== FILTROS LISTADOS DEVUELTOS ====================
+            if (isset($_POST['filtro_dev'])){
+           $list_dev = ORM::forTable('libro')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->where_null('ejemplar.alumno_nie')
+            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->order_by_asc('ejemplar.codigo')
+            ->find_array();
+           $alumno_dev = ORM::for_table('alumno')->
+             select('nombre')->
+             find_many();
+           $curso_dev = ORM::for_table('nivel')->
+           select('nombre')->
+           find_many();
+           // Consulta asignatura
+           $asig = ORM::for_table('asignatura')-> 
+           distinct()->select('nombre')-> 
+           find_many();
            
+           $app->render('listado_devueltos.html.twig',array(
+            'usuario' => $_SESSION['Admin'],
+            'list_dev' => $list_dev,
+            'alumno_dev' => $alumno_dev,
+            'curso_dev' => $curso_dev,
+            'asigs' => $asig
+                    ));
+            }
    
 });
 
@@ -174,33 +196,29 @@ $app->post('/', function() use ($app) {
     $app->get('/contacto', function() use ($app) {
         $app->render('contacto.html.twig',array('usuario' => $_SESSION['Admin'] ));
     })->name('contacto');
-//arrancamos Slim
-    
-    $app->get('/muestraCursos', function() use ($app) {
-                
-            if ($_GET['muestra'] == 'cursos') {
-                $cursos = ORM::for_table('nivel')->select('nombre')->find_array();
-                print_r(json_encode($cursos));
-               /* $i = 0;
-                $arr = array();
-                foreach ($cursos as $j) {
-                    $arr[$i] = $j->nombre;
-                    $i = $i + 1;
-                }
-                print_r(json_encode($arr));*/
-            }
-        })->name('muestraCursos');
         
 /* ================== LISTADO DEVUELTOS =================== */
         $app->get('/listado_devueltos', function() use ($app) {
            $list_dev = ORM::forTable('libro')
             ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
-            ->where_null('ejemplar.alumno_nie')
             ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->where_null('ejemplar.alumno_nie')
             ->find_array();
-        $app->render('listado_devueltos.html.twig',array(
+           $alumno_dev = ORM::for_table('alumno')->
+             select('nombre')->
+             find_many();
+           $curso_dev = ORM::for_table('nivel')->
+           select('nombre')->
+           find_many();
+           $asig = ORM::for_table('asignatura')-> 
+           distinct()->select('nombre')-> 
+           find_many();
+           $app->render('listado_devueltos.html.twig',array(
             'usuario' => $_SESSION['Admin'],
-            'list_dev' => $list_dev
+            'list_dev' => $list_dev,
+            'alumno_dev' => $alumno_dev,
+            'curso_dev' => $curso_dev,
+            'asigs' => $asig
                     ));
     })->name('listado_devueltos');
     
@@ -216,4 +234,23 @@ $app->post('/', function() use ($app) {
             'list_dev' => $list_dev
                     ));
     })->name('listado_no_devueltos');
+    
+    /* ================= RELLENAR SELECT EN ALTAS ================ */
+    $app->get('/muestraCursos', function() use ($app) {
+                
+            if ($_GET['muestra'] == 'cursos') {
+                $cursos = ORM::for_table('nivel')->select('nombre')->find_array();
+                print_r(json_encode($cursos));
+               /* $i = 0;
+                $arr = array();
+                foreach ($cursos as $j) {
+                    $arr[$i] = $j->nombre;
+                    $i = $i + 1;
+                }
+                print_r(json_encode($arr));*/
+            }
+        })->name('muestraCursos');
+        
+        
+//arrancamos Slim
 $app->run();

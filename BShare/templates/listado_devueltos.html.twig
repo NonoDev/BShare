@@ -33,32 +33,43 @@
             color: #ffffff;
             padding: 7px 25px;
         }
+        label{
+            margin: 5px 10px;
+            }
 
     </style>
     <h1 class="page-header">Listado de ejemplares devueltos</h1>
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-4">
-            <form class="form-inline" role="form" id="form1"><!--method="post" action="/" -->
+        <div class="col-sm-8 col-sm-offset-3">
+            <form class="form-inline" role="form" id="form1" method="post" action="/">
                 <div class="form-group">
-                    <label class="sr-only" for="asignatura">Asignatura</label>
+                    <label for="asignatura">Asignatura</label>
                     <select class="form-control">
-
-                        <option>Asignatura</option>
+                        <option></option>
+                        {% for asig in asigs %}
+                        <option name="asig_post" value="{{asig.nombre}}">{{asig.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="sr-only" for="curso">Curso</label>
+                    <label for="curso">Curso</label>
                     <select class="form-control">
-                        <option>Curso</option>
+                        <option></option>
+                        {% for curso in curso_dev %}
+                        <option>{{curso.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="sr-only" for="alumno">Alumno</label>
+                    <label for="alumno">Alumno</label>
                     <select class="form-control">
-                        <option>Alumno</option>
+                        <option></option>
+                        {% for alum in alumno_dev %}
+                        <option>{{alum.nombre}}</option>
+                        {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class="btn btn-success" style="display: inline-block">Filtrar</button>
+                <button type="submit" class="btn btn-success" name="filtro_dev" style="display: inline-block; margin-left: 10px;">Filtrar</button>
             </form>
         </div>
     </div>
