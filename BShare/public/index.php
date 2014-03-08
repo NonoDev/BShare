@@ -128,11 +128,7 @@ $app->post('/', function() use ($app) {
             
             // ===================== FILTROS LISTADOS DEVUELTOS ====================
             if (isset($_POST['filtro_dev'])){
-             $list_dev = ORM::forTable('libro')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
-            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
-            ->where_null('ejemplar.alumno_nie')
-            ->find_array();
+             
              // ========= CONSULTAS PARA RELLENAR SELECT ============ //
            // consulta alumno
            $alumno_dev = ORM::for_table('alumno')->
@@ -179,7 +175,11 @@ $app->post('/', function() use ($app) {
             ->where('asignatura.nombre', $asignatura)
             ->find_array();
            }else{
-               
+               $list_dev = ORM::forTable('libro')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->where_null('ejemplar.alumno_nie')
+            ->find_array();
            }
            
            $app->render('listado_devueltos.html.twig',array(
@@ -194,11 +194,7 @@ $app->post('/', function() use ($app) {
             // ============== LISTADOS NO DEVUELTOS ============= //
             
             if (isset($_POST['filtro_no_dev'])){
-             $list_dev = ORM::forTable('libro')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
-            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
-            ->where_not_null('ejemplar.alumno_nie')
-            ->find_array();
+             
              // ========= CONSULTAS PARA RELLENAR SELECT ============ //
            // consulta alumno
            $alumno_dev = ORM::for_table('alumno')->
@@ -221,7 +217,7 @@ $app->post('/', function() use ($app) {
            // condicional segun el filtro
            if($alumno_no){
              $list_dev = ORM::forTable('libro')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo','alumno.nombre')
             ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
             ->join('alumno', array('ejemplar.alumno_nie', '=', 'alumno.nie'))
             ->where_not_null('ejemplar.alumno_nie')
@@ -229,7 +225,7 @@ $app->post('/', function() use ($app) {
             ->find_array();
            }else if($curso_no){
             $list_dev = ORM::forTable('alumno')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo', 'alumno.nombre')
             ->join('ejemplar', array('alumno.nie', '=', 'ejemplar.alumno_nie'))
             ->join('libro', array('ejemplar.libro_id', '=', 'libro.id'))
             ->join('asignatura', array('libro.asignatura_id', '=', 'asignatura.id'))
@@ -238,12 +234,20 @@ $app->post('/', function() use ($app) {
             ->where('nivel.nombre', $curso_no)
             ->find_array();
            }else if($asignatura_no){
-            $list_dev = ORM::forTable('ejemplar')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
+            $list_dev = ORM::forTable('alumno')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo', 'alumno.nombre')
+            ->join('ejemplar', array('alumno.nie', '=', 'ejemplar.alumno_nie'))
             ->join('libro', array('ejemplar.libro_id', '=', 'libro.id'))
             ->join('asignatura', array('libro.asignatura_id', '=', 'asignatura.id'))
             ->where_not_null('ejemplar.alumno_nie')
             ->where_equal('asignatura.nombre', $asignatura_no)
+            ->find_array();
+           }else{
+               $list_dev = ORM::forTable('libro')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo', 'alumno.nombre')
+            ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->join('alumno', array('ejemplar.alumno_nie', '=', 'alumno.nie'))
+            ->where_not_null('ejemplar.alumno_nie')
             ->find_array();
            }
            
@@ -326,9 +330,10 @@ $app->post('/', function() use ($app) {
     /* ================== LISTADO NO DEVUELTOS =================== */
         $app->get('/listado_no_devueltos', function() use ($app) {
            $list_dev = ORM::forTable('libro')
-            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo')
-            ->where_not_null('ejemplar.alumno_nie')
+            ->select_many('libro.isbn', 'libro.titulo', 'libro.autor', 'libro.anio', 'ejemplar.codigo', 'alumno.nombre')
             ->join('ejemplar', array('libro.id', '=', 'ejemplar.libro_id'))
+            ->join('alumno', array('ejemplar.alumno_nie', '=', 'alumno.nie'))
+            ->where_not_null('ejemplar.alumno_nie')
             ->find_array();
            // consulta alumno
            $alumno_dev = ORM::for_table('alumno')->

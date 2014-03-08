@@ -73,13 +73,14 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Código</th><th>Nombre</th><th>Editorial</th><th>Año</th><th>ISBN</th><th>Acciones</th>
+                <th>Código</th><th>Nombre</th><th>Alumno</th><th>Editorial</th><th>Año</th><th>ISBN</th><th>Acciones</th>
             </tr>
         <tbody>
                 {% for list in list_dev %}
                 <tr>
                     <td>{{list.codigo}}</td>
                     <td>{{list.titulo }}</td>
+                    <td>{{list.nombre}}</td>
                     <td>{{list.autor }}</td>
                     <td>{{list.anio}}</td>
                     <td>{{list.isbn}}</td>
