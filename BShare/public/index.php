@@ -391,6 +391,12 @@ $app->get('/actualizar_ejemplar', function() use ($app) {
 
             $app->render('actualizar_ejemplar.html.twig', array('usuario' => $_SESSION['Admin']));
         })->name('actualizar');
+        
+        /* ================= ACTUALIZAR EJEMPLAR ================ */
+$app->get('/historial', function() use ($app) {
+
+            $app->render('historial.html.twig', array('usuario' => $_SESSION['Admin']));
+        })->name('historial');
 
 
 //arrancamos Slim
