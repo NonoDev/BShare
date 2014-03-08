@@ -44,16 +44,16 @@
             <form class="form-inline" role="form" id="form1" method="post" action="/">
                 <div class="form-group">
                     <label for="asignatura">Asignatura</label>
-                    <select class="form-control">
+                    <select class="form-control" name="asig_post">
                         <option></option>
                         {% for asig in asigs %}
-                        <option name="asig_post" value="{{asig.nombre}}">{{asig.nombre}}</option>
+                        <option value="{{asig.nombre}}">{{asig.nombre}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="curso">Curso</label>
-                    <select class="form-control">
+                    <select class="form-control" name="curso_post">
                         <option></option>
                         {% for curso in curso_dev %}
                         <option>{{curso.nombre}}</option>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-group">
                     <label for="alumno">Alumno</label>
-                    <select class="form-control">
+                    <select class="form-control" name="alumno_post">
                         <option></option>
                         {% for alum in alumno_dev %}
                         <option>{{alum.nombre}}</option>
