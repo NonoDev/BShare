@@ -267,6 +267,20 @@ $app->post('/', function() use ($app) {
                     'asigs' => $asig
                 ));
             }
+            
+            // Dar de baja ejemplares
+            if (isset($_POST['baja_ejemplar'])) {
+                $baja = ORM::for_table('ejemplar')->find_one($_POST['baja_ejemplar']);
+                $baja->delete();
+
+                $app->redirect($app->router()->urlFor('listado_devueltos'));
+            }
+            if (isset($_POST['baja_ejemplar_no'])) {
+                $baja = ORM::for_table('ejemplar')->find_one($_POST['baja_ejemplar_no']);
+                $baja->delete();
+
+                $app->redirect($app->router()->urlFor('listado_no_devueltos'));
+            }
 
             // =============== ACTUALIZACION ESTADO EJEMPLAR ================== //
             if (isset($_POST['anotar_ejemplar'])) {

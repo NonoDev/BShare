@@ -34,6 +34,9 @@
             padding: 7px 25px;
             margin-left: 10px;
         }
+        label{
+            margin: 5px 10px;
+        }
     </style>
 <h1 class="page-header">Listado de ejemplares no devueltos</h1>
 <div class="row">
@@ -87,7 +90,7 @@
                     <td>{{list.isbn}}</td>
                     
                     <td>
-                        <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="baja_ejemplar" title="Dar de baja ejemplar" value="{{ anotar.codigo }}"><i class="fa fa-eraser"></i></button>
+                        <button id="tooltip3" type="submit" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" name="baja_ejemplar_no" title="Dar de baja ejemplar" value="{{ list.codigo }}"><i class="fa fa-eraser"></i></button>
                         <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" name="anotar_ejemplar" title="Realizar anotación" value="{{ anotar.codigo }}"><i class="fa fa-edit"></i></button>
                     </td>
                 </tr>
@@ -97,6 +100,6 @@
             </thead>
         </table>
         <a href="{{ urlFor('inicio') }}" role="button" id="tooltip1" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a inicio"><i class="fa fa-arrow-left"></i></a>
-        <a href="{{ urlFor('listado_devueltos') }}" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir a ejemplares devueltos"><i class="fa fa-arrow-right"></i></a>
+        <a href="{{ urlFor('listado_devueltos') }}" id="tooltip2" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir a ejemplares devueltos"><i class="fa fa-arrow-right"></i></a>
     </form>
         {% endblock %}
