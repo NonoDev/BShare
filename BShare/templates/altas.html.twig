@@ -1,52 +1,5 @@
 {% extends "base.html.twig" %}
 {% block contenido %}
-<script type="text/javascript">
-     muestraDatos();
-
-    function rellenaSelect(niveles) {
-        var aRellenar = document.getElementById("curso");
-        
-        var j = 1; 
-        for (var i = 0; i < niveles.length; i++) {
-            
-            var d = niveles[i].nombre;
-            console.log(d);
-            aRellenar.options.add(new Option(d,i));
-        }
-    }
-
-    function creaXmlHttpRequest() {
-        var xmlHttp;
-        if (window.XMLHttpRequest) {
-            xmlHttp = new XMLHttpRequest();
-        }
-        else {
-            if (window.ActiveXObject) {
-                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-        }
-        return xmlHttp;
-    }
-
-    function muestraDatos() {
-        conexion = creaXmlHttpRequest();
-        // url = escape("http://www.gpalomares.com.es/daw/quiniela.php?opcion=1");
-        conexion.open("GET", "/muestraCursos?muestra=cursos", true);
-        conexion.onreadystatechange = devuelveConsulta;
-        conexion.send();
-    }
-
-    function devuelveConsulta() {
-        if (conexion.readyState == 4 /* && conexion.status==200*/) {
-            nivel = conexion.responseText;
-            nivel = JSON.parse(nivel);
-            rellenaSelect(nivel);
-        }
-        else {
-            //resp.innerHTML = "...Cargando...";
-        }
-    }
-    </script>
                    <style type="text/css">
         .panel{
             border-radius: 0;
