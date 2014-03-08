@@ -104,8 +104,8 @@ $app->post('/', function() use ($app) {
             $app->redirect($app->router()->urlFor('listado_usuarios'));
             }
             
-        
-        // Editar usuarios
+        // ============== EDICION DE USUARIOS =============== //
+        // Busco al usuario asociado al post del boton que se pulsa
             if(isset($_POST['edit_usuario'])){
             $modificar = ORM::for_table('usuario')->find_one($_POST['edit_usuario']);
             $app->render('modificar_usuario.html.twig',array(
@@ -114,7 +114,7 @@ $app->post('/', function() use ($app) {
                     ));
             }
         
-        
+        // insercion de nuevos datos
         if(isset($_POST['actualizar2'])){
             $modificar = ORM::for_table('usuario')->find_one($_POST['actualizar2']);
             $modificar->nombre_usuario = $_POST['nombre_user'];
@@ -259,6 +259,16 @@ $app->post('/', function() use ($app) {
             'asigs' => $asig
                     ));
             }
+            
+            // =============== ACTUALIZACION ESTADO EJEMPLAR ================== //
+            if(isset($_POST['anotar_ejemplar'])){
+            $anotar = ORM::for_table('ejemplar')->find_one($_POST['anotar_ejemplar']);
+            $app->render('actualizar_ejemplar.html.twig',array(
+            'usuario' => $_SESSION['Admin'], 
+            'anotar' => $anotar  
+                    ));
+            }
+            
 });
 
 /* ======================= GESTIÓN DE USUARIOS =====================*/
@@ -357,20 +367,10 @@ $app->post('/', function() use ($app) {
     })->name('listado_no_devueltos');
     
     /* ================= RELLENAR SELECT EN ALTAS ================ */
-    $app->get('/muestraCursos', function() use ($app) {
+    $app->get('/actualizar_ejemplar', function() use ($app) {
                 
-            if ($_GET['muestra'] == 'cursos') {
-                $cursos = ORM::for_table('nivel')->select('nombre')->find_array();
-                print_r(json_encode($cursos));
-               /* $i = 0;
-                $arr = array();
-                foreach ($cursos as $j) {
-                    $arr[$i] = $j->nombre;
-                    $i = $i + 1;
-                }
-                print_r(json_encode($arr));*/
-            }
-        })->name('muestraCursos');
+            $app->render('actualizar_ejemplar.html.twig',array('usuario' => $_SESSION['Admin'] ));
+        })->name('actualizar');
         
         
 //arrancamos Slim
