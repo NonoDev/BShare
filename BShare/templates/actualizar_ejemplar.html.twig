@@ -24,10 +24,54 @@
             }
             .btn-warning{
                 background: #F88529;
-                }
+            }
+            h3{
+                margin-top: 2px;
+            }
           
     </style>
         <h1 class="page-header">Actualización de ejemplares</h1>
+        <form class="form-horizontal" role="form" method="post" action="/">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-cogs"></i> Actualización del ejemplar {{ anotar.codigo }}</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label for="nombre_usuario" class="col-sm-2 control-label">Código del ejemplar</label>
+                    <div class="col-sm-10">
+                        <h3>{{ anotar.codigo }}</h3>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="anotacion" class="col-sm-2 control-label">Anotación</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="anotacion" name="anotacion" value="" placeholder="Comentarios...."></textarea>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label for="estado" class="col-sm-2 control-label">Estado</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" name="estado">
+                        <option placeholder="Estado del ejemplar"></option>
+                        
+                    </select>
+                        </div>
+                </div>
+                   
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-warning btn-circle btn-xl" id="tooltip2" data-toggle="tooltip" data-placement="bottom" title="Actualizar cambios" name="actualizar_ejemplar" value="{{ anotar.codigo }}"><i class="fa fa-upload"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <a href="{{ urlFor('listado_devueltos') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver al listado de ejemplares"><i class="fa fa-arrow-left"></i>
+        </a>
+        <a href="" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir al historial del ejemplar"><i class="fa fa-arrow-right"></i></a>           
         
          
         {% endblock %}
