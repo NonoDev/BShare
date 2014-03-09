@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% block titulo %}Actualización del estado de un ejemplar{% endblock %}
 {% block contenido %}
 <style type="text/css">
         .panel{
@@ -56,7 +57,11 @@
                     <div class="col-sm-10">
                     <select class="form-control" name="estado">
                         <option placeholder="Estado del ejemplar"></option>
-                        
+                        <option value="0">Bueno</option>
+                        <option value="1">Regular</option>
+                        <option value="2">Malo</option>
+                        <option value="3">Perdido</option>
+                        <option value="4">Baja</option>
                     </select>
                         </div>
                 </div>
@@ -69,9 +74,9 @@
                 
             </div>
         </div>
-        <a href="{{ urlFor('listado_devueltos') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver al listado de ejemplares"><i class="fa fa-arrow-left"></i>
+        <a href="{{ urlFor('listado_devueltos') }}" role="button" id="tooltip3" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver al listado de ejemplares"><i class="fa fa-arrow-left"></i>
         </a>
-        <a href="{{ urlFor('historial') }}" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir al historial del ejemplar"><i class="fa fa-arrow-right"></i></a>           
-        
+        <button value="{{anotar.codigo}}" name="ir_historial" id="tooltip1" role="button" type="submit" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir al historial del ejemplar"><i class="fa fa-arrow-right"></i></button>           
+        </form>
          
         {% endblock %}

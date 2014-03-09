@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% block titulo %}Historial de ejemplares{% endblock %}
 {% block contenido %}
 <style type="text/css">
         .panel{
@@ -28,8 +29,44 @@
             h3{
                 margin-top: 2px;
             }
+            #form1{
+            margin-bottom: 20px;
+
+        }
+        #form1 button{
+            display: inline-block;
+            color: #ffffff;
+            padding: 7px 25px;
+            margin-left: 10px;
+        }
+        h2{
+            margin-bottom: 40px;
+            }
           
     </style>
         <h1 class="page-header">Historial de ejemplares</h1>
-        
+        <div class="row">
+        <div class="col-sm-6 col-sm-offset-5">
+            <form class="form-inline" role="form" id="form1" method="post" action="/">
+                <div class="form-group">
+                    <label class="sr-only" for="search_hist">Buscar</label>
+                    <input type="text" class="form-control" name="search_hist" id="search_hist" placeholder="Código de ejmplar">
+                </div>
+                <button type="submit" class="btn btn-success" name="boton_buscar_ej" >Buscar</button>
+            </form>
+        </div>
+    </div>
+        <h2>Historia del ejemplar {{ ejemplares.codigo }}{{anotar.codigo}}</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th><th>Nombre</th><th>Editorial</th><th>Año</th><th>ISBN</th><th>Acciones</th>
+                </tr>
+            <tbody>
+                
+
+               
+                </tbody>
+                </thead>
+            </table>
         {% endblock %}

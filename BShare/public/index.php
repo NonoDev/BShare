@@ -80,7 +80,7 @@ $app->post('/', function() use ($app) {
 
             // Crear usuario
             if (isset($_POST['crear_user'])) {
-                $nuevo_user = ORM::for_table('usuario')->create();  // preparo la consulta
+                $nuevo_user = ORM::for_table('usuario')->create();  // preparo la insercion
 
                 $nuevo_user->nombre_usuario = $_POST['nombre_user'];
                 $nuevo_user->nombre_completo = $_POST['full_name'];
@@ -290,8 +290,52 @@ $app->post('/', function() use ($app) {
                     'anotar' => $anotar
                 ));
             }
+            if(isset($_POST['actualizar_ejemplar'])){
+                /*$cod = $_POST['actualizar_ejemplar'];
+                $actualizar = ORM::for_table('ejemplar')->
+                select_many('ejemplar.codigo', 'ejemplar.estado', 'historial.anotacion', 'historial.fecha', 'historial.estado')->
+                join('historial', array('ejemplar.codigo', '=', 'historial.ejemplar_codigo'))->
+                where('ejemplar.codigo', $cod)->
+                find_array();*/
+                $ejemplar = ORM::for_table('ejemplar')->create();
+                $ejemplar->estado = $_POST['estado'];
+                $ejemplar->save();
+                
+                $historial = ORM::for_table('historial')->create();
+                $historial->estado = $_POST['estado'];
+                $historial->anotacion = $_POST['anotacion'];
+                $historial->fecha(date('Y/m/d'));
+                $historial->save();
+                $app->redirect($app->router()->urlFor('listado_devueltos'));
+            }
+            
+            // Boton que redirige a la pantalla de historial cargando los campos del ejemplar seleccionado
+            if(isset($_POST['ir_historial'])){
+                $anotar = ORM::for_table('ejemplar')->find_one($_POST['ir_historial']);
+                $app->render('historial.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'anotar' => $anotar
+                ));
+            }
+            
+            // Buscador de ejemplares
+            if(isset($_POST['boton_buscar_ej'])){
+                $buscar_ej = $_POST['search_hist'];
+                $busqueda = ORM::for_table('ejemplar')->
+                select('ejemplar.*')->
+                where('codigo', $buscar_ej)->
+                find_one();
+                $app->render('historial.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'ejemplares' => $busqueda
+                ));
+            }
+            
         });
 
+        /* 
+         * Rutas de la aplicacion
+         */
 /* ======================= GESTIÓN DE USUARIOS ===================== */
 
 
@@ -323,7 +367,14 @@ $app->get('/nuevo_usuario', function() use ($app) {
 
 /* ====================== ALTAS ======================= */
 $app->get('/altas', function() use ($app) {
-            $app->render('altas.html.twig', array('usuario' => $_SESSION['Admin']));
+   /* $asig = ORM::for_table('asignatura')->
+                        distinct()->select('asignatura.nombre')->
+                        select('asignatura.nivel_id')->
+                        select('nivel.nombre', 'nombre_nivel')-> 
+                        join('nivel', array('asignatura.nivel_id', '=', 'nivel.id'))->
+                        find_many();*/
+            $app->render('altas.html.twig', array(
+                'usuario' => $_SESSION['Admin']));
         })->name('altas');
 
 

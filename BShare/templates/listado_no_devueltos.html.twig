@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% block titulo %}Listado de ejemplares no devueltos{% endblock %}
 {% block contenido %}
 <style type="text/css">
         thead{
@@ -69,7 +70,7 @@
                         {% endfor %}
                     </select>
                 </div>
-  <button type="submit" class="btn btn-success" name="filtro_no_dev" style="display: inline-block; margin-left: 10px;">Filtrar</button>
+  <button type="submit" class="btn btn-success" name="filtro_no_dev">Filtrar</button>
 </form>
         </div>
     </div>
