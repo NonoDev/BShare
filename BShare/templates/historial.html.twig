@@ -2,14 +2,7 @@
 {% block titulo %}Historial de ejemplares{% endblock %}
 {% block contenido %}
 <style type="text/css">
-        .panel{
-            border-radius: 0;
-            }
-            .panel-default > .panel-heading {
-            color: #fff;
-            background-color: #52B9E9;
-            border-color: #ddd;
-            }
+        
 .btn-circle.btn-xl{
             float: left;
             width: 80px;
@@ -63,10 +56,21 @@
                     <th>Fecha</th><th>Tipo de actuación</th><th>Estado</th><th>Anotación</th>
                 </tr>
             <tbody>
-                
+                {% for lista in listas %}
+                    <tr>
+                <td>{{lista.fecha|date('d/m/Y')}}</td>
+                <td>{{lista.tipo}}</td>
+                <td>{% if lista.estado == 0 %} Bueno {% elseif lista.estado == 1 %} Regular
+                {% elseif lista.estado == 2 %} Malo {% elseif lista.estado == 3 %} Perdido
+                {% elseif lista.estado == 4 %} Baja {% else %} Sin estado {% endif %}
+                </td>
+                <td>{{lista.anotacion}}</td>
+                    </tr>
+                {% endfor %}
 
                
                 </tbody>
                 </thead>
             </table>
+        <h4><strong>Total</strong> de hitos encontrados: <strong>{{ items.count }}</strong></h4>
         {% endblock %}

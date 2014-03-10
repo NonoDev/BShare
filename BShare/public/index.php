@@ -292,7 +292,6 @@ $app->post('/', function() use ($app) {
             }
             if(isset($_POST['actualizar_ejemplar'])){
                 $usuario = $_SESSION['Admin'];
-                var_dump($usuario['id']);
               // Inserción de la actualización en la tabla historial
                 $historial = ORM::for_table('historial')->create();
                 $historial->estado = $_POST['estado'];
@@ -310,12 +309,21 @@ $app->post('/', function() use ($app) {
                 $app->redirect($app->router()->urlFor('listado_devueltos'));
             }
             
+            /* =========== HISTORIAL DE EJEMPLARES ============== */
             // Boton que redirige a la pantalla de historial cargando los campos del ejemplar seleccionado
             if(isset($_POST['ir_historial'])){
                 $anotar = ORM::for_table('ejemplar')->find_one($_POST['ir_historial']);
+                $lista_historial = ORM::for_table('historial')->
+                select_many('fecha', 'estado', 'anotacion', 'tipo')->
+                count()-> 
+                where_equal('ejemplar_codigo', $anotar['codigo'])->
+                order_by_asc('fecha')->
+                find_many();
+        var_dump($lista_historial);
                 $app->render('historial.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
-                    'anotar' => $anotar
+                    'anotar' => $anotar,
+                    'listas' => $lista_historial
                 ));
             }
             
@@ -326,9 +334,23 @@ $app->post('/', function() use ($app) {
                 select('ejemplar.*')->
                 where('codigo', $buscar_ej)->
                 find_one();
+                // consulta para consultar los items mostrados
+                $items = ORM::for_table('historial')-> 
+                        select_expr('count(*)', 'count')->where('ejemplar_codigo', $buscar_ej)->
+                        find_one();
+               
+                $lista_historial = ORM::for_table('historial')->
+                select_many('fecha', 'estado', 'anotacion', 'tipo')->
+                where('ejemplar_codigo', $buscar_ej)->
+                order_by_asc('fecha')->
+                        find_many();
+                
+        
                 $app->render('historial.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
-                    'ejemplares' => $busqueda
+                    'ejemplares' => $busqueda,
+                    'listas' => $lista_historial,
+                    'items' => $items
                 ));
             }
             
