@@ -291,21 +291,22 @@ $app->post('/', function() use ($app) {
                 ));
             }
             if(isset($_POST['actualizar_ejemplar'])){
-                /*$cod = $_POST['actualizar_ejemplar'];
-                $actualizar = ORM::for_table('ejemplar')->
-                select_many('ejemplar.codigo', 'ejemplar.estado', 'historial.anotacion', 'historial.fecha', 'historial.estado')->
-                join('historial', array('ejemplar.codigo', '=', 'historial.ejemplar_codigo'))->
-                where('ejemplar.codigo', $cod)->
-                find_array();*/
-                $ejemplar = ORM::for_table('ejemplar')->create();
-                $ejemplar->estado = $_POST['estado'];
-                $ejemplar->save();
-                
+                $usuario = $_SESSION['Admin'];
+                var_dump($usuario['id']);
+              // Inserción de la actualización en la tabla historial
                 $historial = ORM::for_table('historial')->create();
                 $historial->estado = $_POST['estado'];
                 $historial->anotacion = $_POST['anotacion'];
-                $historial->fecha(date('Y/m/d'));
+                $historial->fecha = date('Y-m-d');
+                $historial->tipo = 'actualizacion';
+                $historial->ejemplar_codigo = $_POST['actualizar_ejemplar'];
+                $historial->usuario_id = $usuario['id'];
                 $historial->save();
+                
+                // Actualización del estado del ejemplar en la tabla ejemplar
+                $ejemplar = ORM::for_table('ejemplar')->find_one($_POST['actualizar_ejemplar']);
+                $ejemplar->estado = $_POST['estado'];
+                $ejemplar->save();
                 $app->redirect($app->router()->urlFor('listado_devueltos'));
             }
             
