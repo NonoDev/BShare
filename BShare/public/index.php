@@ -103,10 +103,17 @@ $app->post('/', function() use ($app) {
             // Busco al usuario asociado al post del boton que se pulsa
             if (isset($_POST['edit_usuario'])) {
                 $modificar = ORM::for_table('usuario')->find_one($_POST['edit_usuario']);
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('modificar_usuario.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'modificar_user' => $modificar
                 ));
+                } else {
+                    $app->render('modificar_usuario.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'modificar_user' => $modificar
+                ));
+                }
             }
 
             // insercion de nuevos datos
@@ -128,10 +135,17 @@ $app->post('/', function() use ($app) {
                 select('usuario.*')->
                 where('nombre_usuario', $buscar_user)->
                 find_one();
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('modificar_usuario.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'modificar_user' => $busqueda
                 ));
+                } else {
+                    $app->render('modificar_usuario.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'modificar_user' => $busqueda
+                ));
+                }
             }
 
             // ===================== FILTROS LISTADOS DEVUELTOS ====================
@@ -189,7 +203,7 @@ $app->post('/', function() use ($app) {
                             ->where_null('ejemplar.alumno_nie')
                             ->find_array();
                 }
-
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('listado_devueltos.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'list_dev' => $list_dev,
@@ -197,6 +211,15 @@ $app->post('/', function() use ($app) {
                     'curso_dev' => $curso_dev,
                     'asigs' => $asig
                 ));
+                } else {
+                    $app->render('listado_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                }
             }
 
             // ============== LISTADOS NO DEVUELTOS ============= //
@@ -258,7 +281,7 @@ $app->post('/', function() use ($app) {
                             ->where_not_null('ejemplar.alumno_nie')
                             ->find_array();
                 }
-
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('listado_no_devueltos.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'list_dev' => $list_dev,
@@ -266,18 +289,30 @@ $app->post('/', function() use ($app) {
                     'curso_dev' => $curso_dev,
                     'asigs' => $asig
                 ));
+                } else {
+                    $app->render('listado_no_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                }
             }
             
             // Dar de baja ejemplares
             if (isset($_POST['baja_ejemplar'])) {
+                
                 $baja = ORM::for_table('ejemplar')->find_one($_POST['baja_ejemplar']);
                 $baja->delete();
+              
 
                 $app->redirect($app->router()->urlFor('listado_devueltos'));
             }
             if (isset($_POST['baja_ejemplar_no'])) {
                 $baja = ORM::for_table('ejemplar')->find_one($_POST['baja_ejemplar_no']);
                 $baja->delete();
+             
 
                 $app->redirect($app->router()->urlFor('listado_no_devueltos'));
             }
@@ -285,13 +320,20 @@ $app->post('/', function() use ($app) {
             // =============== ACTUALIZACION ESTADO EJEMPLAR ================== //
             if (isset($_POST['anotar_ejemplar'])) {
                 $anotar = ORM::for_table('ejemplar')->find_one($_POST['anotar_ejemplar']);
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('actualizar_ejemplar.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'anotar' => $anotar
                 ));
+                } else {
+                    $app->render('actualizar_ejemplar.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'anotar' => $anotar
+                ));
+                }
             }
             if(isset($_POST['actualizar_ejemplar'])){
-                $usuario = $_SESSION['Admin'];
+                $usuario1 = $_SESSION['Admin'];
               // Inserción de la actualización en la tabla historial
                 $historial = ORM::for_table('historial')->create();
                 $historial->estado = $_POST['estado'];
@@ -299,7 +341,7 @@ $app->post('/', function() use ($app) {
                 $historial->fecha = date('Y-m-d');
                 $historial->tipo = 'actualizacion';
                 $historial->ejemplar_codigo = $_POST['actualizar_ejemplar'];
-                $historial->usuario_id = $usuario['id'];
+                $historial->usuario_id = $usuario1['id'];
                 $historial->save();
                 
                 // Actualización del estado del ejemplar en la tabla ejemplar
@@ -315,16 +357,29 @@ $app->post('/', function() use ($app) {
                 $anotar = ORM::for_table('ejemplar')->find_one($_POST['ir_historial']);
                 $lista_historial = ORM::for_table('historial')->
                 select_many('fecha', 'estado', 'anotacion', 'tipo')->
-                count()-> 
                 where_equal('ejemplar_codigo', $anotar['codigo'])->
                 order_by_asc('fecha')->
                 find_many();
-        var_dump($lista_historial);
+                
+                // consulta para consultar los items mostrados
+                $items = ORM::for_table('historial')-> 
+                        select_expr('count(*)', 'count')->where('ejemplar_codigo', $anotar['codigo'])->
+                        find_one();
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('historial.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'anotar' => $anotar,
-                    'listas' => $lista_historial
+                    'listas' => $lista_historial, 
+                    'items' => $items
                 ));
+                } else {
+                    $app->render('historial.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'anotar' => $anotar,
+                    'listas' => $lista_historial, 
+                    'items' => $items
+                ));
+                }
             }
             
             // Buscador de ejemplares
@@ -345,13 +400,21 @@ $app->post('/', function() use ($app) {
                 order_by_asc('fecha')->
                         find_many();
                 
-        
+                if (($_SESSION['AdminCount']) == 1) {
                 $app->render('historial.html.twig', array(
                     'usuario' => $_SESSION['Admin'],
                     'ejemplares' => $busqueda,
                     'listas' => $lista_historial,
                     'items' => $items
                 ));
+                } else {
+                    $app->render('historial.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'ejemplares' => $busqueda,
+                    'listas' => $lista_historial,
+                    'items' => $items
+                ));
+                }
             }
             
         });
@@ -390,20 +453,22 @@ $app->get('/nuevo_usuario', function() use ($app) {
 
 /* ====================== ALTAS ======================= */
 $app->get('/altas', function() use ($app) {
-   /* $asig = ORM::for_table('asignatura')->
-                        distinct()->select('asignatura.nombre')->
-                        select('asignatura.nivel_id')->
-                        select('nivel.nombre', 'nombre_nivel')-> 
-                        join('nivel', array('asignatura.nivel_id', '=', 'nivel.id'))->
-                        find_many();*/
-            $app->render('altas.html.twig', array(
-                'usuario' => $_SESSION['Admin']));
+               if (($_SESSION['AdminCount']) == 1) {
+                $app->render('altas.html.twig', array('usuario' => $_SESSION['Admin']));
+            } else {
+                $app->render('altas.html.twig', array('usuario' => $_SESSION['NoAdmin']));
+            }
         })->name('altas');
 
 
 /* ================= CONTACTO ================== */
 $app->get('/contacto', function() use ($app) {
-            $app->render('contacto.html.twig', array('usuario' => $_SESSION['Admin']));
+            if (($_SESSION['AdminCount']) == 1) {
+                $app->render('contacto.html.twig', array('usuario' => $_SESSION['Admin']));
+            } else {
+                $app->render('contacto.html.twig', array('usuario' => $_SESSION['NoAdmin']));
+            }
+           
         })->name('contacto');
 
 /* ================== LISTADO DEVUELTOS =================== */
@@ -422,13 +487,23 @@ $app->get('/listado_devueltos', function() use ($app) {
             $asig = ORM::for_table('asignatura')->
                     distinct()->select('nombre')->
                     find_many();
-            $app->render('listado_devueltos.html.twig', array(
-                'usuario' => $_SESSION['Admin'],
-                'list_dev' => $list_dev,
-                'alumno_dev' => $alumno_dev,
-                'curso_dev' => $curso_dev,
-                'asigs' => $asig
-            ));
+            if (($_SESSION['AdminCount']) == 1) {
+                $app->render('listado_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                } else {
+                    $app->render('listado_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                }
         })->name('listado_devueltos');
 
 /* ================== LISTADO NO DEVUELTOS =================== */
@@ -451,25 +526,42 @@ $app->get('/listado_no_devueltos', function() use ($app) {
             $asig = ORM::for_table('asignatura')->
                     distinct()->select('nombre')->
                     find_many();
-            $app->render('listado_no_devueltos.html.twig', array(
-                'usuario' => $_SESSION['Admin'],
-                'list_dev' => $list_dev,
-                'alumno_dev' => $alumno_dev,
-                'curso_dev' => $curso_dev,
-                'asigs' => $asig
-            ));
+            if (($_SESSION['AdminCount']) == 1) {
+                $app->render('listado_no_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                } else {
+                    $app->render('listado_no_devueltos.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'list_dev' => $list_dev,
+                    'alumno_dev' => $alumno_dev,
+                    'curso_dev' => $curso_dev,
+                    'asigs' => $asig
+                ));
+                }
         })->name('listado_no_devueltos');
 
 /* ================= ACTUALIZAR EJEMPLAR ================ */
 $app->get('/actualizar_ejemplar', function() use ($app) {
-
-            $app->render('actualizar_ejemplar.html.twig', array('usuario' => $_SESSION['Admin']));
+            if (($_SESSION['AdminCount']) == 1) {
+                $app->render('actualizar_ejemplar.html.twig', array('usuario' => $_SESSION['Admin']));
+            } else {
+                $app->render('actualizar_ejemplar.html.twig', array('usuario' => $_SESSION['NoAdmin']));
+            }
+            
         })->name('actualizar');
         
-        /* ================= ACTUALIZAR EJEMPLAR ================ */
+        /* ================= HISTORIAL EJEMPLAR ================ */
 $app->get('/historial', function() use ($app) {
-
-            $app->render('historial.html.twig', array('usuario' => $_SESSION['Admin']));
+            if (($_SESSION['AdminCount']) == 1) {
+                $app->render('historial.html.twig', array('usuario' => $_SESSION['Admin']));
+            } else {
+                $app->render('historial.html.twig', array('usuario' => $_SESSION['NoAdmin']));
+            }
         })->name('historial');
 
 
