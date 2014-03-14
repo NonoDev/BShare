@@ -1,22 +1,89 @@
 {% extends "base.html.twig" %}
 {% block contenido %}
+<style type="text/css">
+        h2{
+            text-align: center;
+        }
+        .btn{
+            float: left;
+            font-size: 70px;
+            margin: 25px 20px;
+            padding: 15px 20px;
+            }
+        .btn:hover{
+            color: #fff;
+            
+        }
+        #tooltip:hover,#tooltip5:hover{
+            color: #fff;
+            background-color: #FA3031;
+        }
+        #tooltip1:hover,#tooltip6:hover{
+            color: #fff;
+            background-color: #52B9E9;
+        }
+        #tooltip2:hover{
+            color: #fff;
+            background-color: #43C83C;
+        }
+        #tooltip3:hover{
+            color: #fff;
+            background-color: #F88529;
+        }
+        #tooltip4:hover{
+            color: #fff;
+            background-color: #932AB6;
+        }
+        #tooltip7:hover{
+            color: #fff;
+            background-color: #43C83C;
+        }
+        
+        #tooltip,#tooltip5{
+            color: #FA3031;
+        }
+        #tooltip1,#tooltip6{
+            color: #52B9E9;
+        }
+        #tooltip2{
+            color: #43C83C;
+        }
+        #tooltip3{
+            color: #F88529;
+        }
+        #tooltip4{
+            color: #932AB6;
+        }
+        #tooltip7{
+            color: #43C83C;
+        }
+        
+        
+    </style>
         <h1 class="page-header">Bienvenido</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2>Gestiona, administra y comprueba con BShare</h2>
+        
+        <div class="row">
+        <div class="col-sm-10 col-sm-offset-3">
+        <a href="{{ urlFor('altas') }}" id="tooltip" role="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Altas de libros"><i class="fa fa-book"></i>
+                            </a>
+        <a href="{{ urlFor('listado_devueltos') }}" id="tooltip1" role="button" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Listado de ejemplares devueltos"><i class="fa fa-list-alt"></i>
+                            </a>
+        <a href="{{ urlFor('listado_no_devueltos') }}" id="tooltip2" role="button" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Listado de ejemplares no devueltos"><i class="fa fa-list-ol"></i>
+                            </a>
+        <a href="#" role="button" id="tooltip3" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Devoluciones"><i class="fa fa-arrows-h"></i>
+                            </a>
+            </div>
+                <div class="col-sm-10 col-sm-offset-3">
+        <a href="#" id="tooltip4" role="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Entregas"><i class="fa fa-outdent"></i>
+                            </a>
+        <a href="{{ urlFor('historial') }}" id="tooltip5" role="button" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Historial de ejemplares"><i class="fa fa-cloud"></i>
+                            </a>
+        <a href="{{ urlFor('contacto') }}" id="tooltip6" role="button" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Contacto"><i class="fa fa-edit"></i>
+                            </a>
+        <a href="https://github.com/NonoDev" role="button" id="tooltip7" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Github del desarrollador"><i class="fa fa-github-square"></i>
+                            </a>
+                        
+             </div>
+        </div>
         {% endblock %}
