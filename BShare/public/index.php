@@ -127,6 +127,16 @@ $app->post('/', function() use ($app) {
 
             // insercion de nuevos datos
             if (isset($_POST['actualizar2'])) {
+                $error_user = ORM::for_table('usuario')->where('nombre_usuario', $_POST['nombre_user'])->find_one();
+                $modificar = ORM::for_table('usuario')->find_one($_POST['actualizar2']);
+                if($error_user){
+                    $error = 'El usuario que ha escogido ya existe en la base de datos';
+                    $app->render('modificar_usuario.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'error' => $error,
+                        'modificar_user'=> $modificar
+                        ));
+                }else{
                 $modificar = ORM::for_table('usuario')->find_one($_POST['actualizar2']);
                 $modificar->nombre_usuario = $_POST['nombre_user'];
                 $modificar->nombre_completo = $_POST['full_name'];
@@ -135,6 +145,7 @@ $app->post('/', function() use ($app) {
                 $modificar->save();
 
                 $app->redirect($app->router()->urlFor('listado_usuarios'));
+            }
             }
             // Buscador de usuarios
             

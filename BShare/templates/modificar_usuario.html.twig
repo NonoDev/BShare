@@ -44,7 +44,7 @@
             <form class="form-inline" role="form" id="form1" method="post" action="/">
                 <div class="form-group">
                     <label class="sr-only" for="search">Buscar</label>
-                    <input type="password" class="form-control" name="search" id="pass" placeholder="Buscar nombre de usuario">
+                    <input type="text" class="form-control" name="search" id="pass" placeholder="Buscar nombre de usuario">
                 </div>
                 <button type="submit" class="btn btn-success" name="boton_buscar" >Buscar</button>
             </form>
@@ -99,4 +99,5 @@
         <a href="{{ urlFor('gestion') }}" role="button" id="tooltip3" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a gestion de usuarios"><i class="fa fa-arrow-left"></i>
         </a>
         <a href="{{ urlFor('listado_usuarios') }}" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir a listado de usuarios"><i class="fa fa-arrow-right"></i></a>           
-        {% endblock %}
+{% if error %}<div class="alert alert-danger">{{error}}</div>{% endif %}        
+{% endblock %}
