@@ -29,6 +29,7 @@
             h3{
                 margin-top: 2px;
             }
+            
           
     </style>
         <h1 class="page-header">Actualización de ejemplares</h1>
@@ -49,7 +50,7 @@
                 <div class="form-group">
                     <label for="anotacion" class="col-sm-2 control-label">Anotación</label>
                     <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="anotacion" name="anotacion" value="" placeholder="Comentarios...."></textarea>
+                        <textarea type="text" class="form-control" id="anotacion" name="anotacion" value="" placeholder="Comentarios...." autofocus></textarea>
                     </div>
                 </div>
                 <div class="form-group" >
@@ -78,5 +79,5 @@
         </a>
         <button value="{{anotar.codigo}}" name="ir_historial" id="tooltip1" role="button" type="submit" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir al historial del ejemplar"><i class="fa fa-arrow-right"></i></button>           
         </form>
-         
+        {% if error %}<div class="alert alert-danger">{{error}}</div>{% endif %}
         {% endblock %}

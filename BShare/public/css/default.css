@@ -242,3 +242,14 @@ table.dataTable thead .sorting:after {
 .show-grid {
     margin: 15px 0;
 }
+
+.alert{
+                margin-top: 100px;
+                color: #fff;
+                font-weight: bold;
+                text-align: center;
+            }
+
+.alert-danger{
+    background-color: #FA3031;
+}

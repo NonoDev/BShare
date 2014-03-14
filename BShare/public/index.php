@@ -80,8 +80,15 @@ $app->post('/', function() use ($app) {
 
             // Crear usuario
             if (isset($_POST['crear_user'])) {
+                $error_user = ORM::for_table('usuario')->where('nombre_usuario', $_POST['nombre_user'])->find_one();
+                if($error_user){
+                    $error = 'El usuario que ha escogido ya existe en la base de datos';
+                    $app->render('nuevo_usuario.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'error' => $error
+                        ));
+                }else{
                 $nuevo_user = ORM::for_table('usuario')->create();  // preparo la insercion
-
                 $nuevo_user->nombre_usuario = $_POST['nombre_user'];
                 $nuevo_user->nombre_completo = $_POST['full_name'];
                 $nuevo_user->usuario_pass = $_POST['pass'];
@@ -90,6 +97,8 @@ $app->post('/', function() use ($app) {
 
                 $app->redirect($app->router()->urlFor('gestion'));
             }
+            }
+            
 
             // Borrar usuarios
             if (isset($_POST['borrar_user'])) {
@@ -333,6 +342,25 @@ $app->post('/', function() use ($app) {
                 }
             }
             if(isset($_POST['actualizar_ejemplar'])){
+                // Si no se selecciona un estado se vuelve a cargar la plantilla mostrando un error
+                if(strlen($_POST['estado']) < 1){   
+                    $anotar = ORM::for_table('ejemplar')->find_one($_POST['actualizar_ejemplar']);
+                    $error = 'Debe seleccionar un estado del ejemplar';
+                if (($_SESSION['AdminCount']) == 1) {
+                $app->render('actualizar_ejemplar.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'error' => $error,
+                    'anotar' => $anotar
+                ));
+                } else {
+                    $app->render('actualizar_ejemplar.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'error' => $error,
+                    'anotar' => $anotar
+                ));
+                }
+                // Si no hay error, se actualizan los datos en la base de datos
+                }else{
                 $usuario1 = $_SESSION['Admin'];
               // Inserción de la actualización en la tabla historial
                 $historial = ORM::for_table('historial')->create();
@@ -349,6 +377,7 @@ $app->post('/', function() use ($app) {
                 $ejemplar->estado = $_POST['estado'];
                 $ejemplar->save();
                 $app->redirect($app->router()->urlFor('listado_devueltos'));
+            }
             }
             
             /* =========== HISTORIAL DE EJEMPLARES ============== */

@@ -37,19 +37,19 @@
                         <div class="form-group">
                           <label for="nombre_usuario" class="col-sm-2 control-label">Nombre de usuario</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nombre_usuario" name="nombre_user" placeholder="Usuario">
+                            <input type="text" class="form-control" id="nombre_usuario" name="nombre_user" placeholder="Usuario" required autofocus>
                           </div>
                         </div>
                     <div class="form-group">
                           <label for="full_name" class="col-sm-2 control-label">Nombre completo</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Nombre completo">
+                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Nombre completo" required>
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="pass" class="col-sm-2 control-label">Contraseña</label>
                           <div class="col-sm-10">
-                            <input type="password" class="form-control" name="pass" id="pass" placeholder="Contraseña">
+                            <input type="password" class="form-control" name="pass" id="pass" placeholder="Contraseña" required>
                           </div>
                         </div>
                         <div class="form-group">
@@ -76,4 +76,5 @@
                             </a>
             <button type="reset" id="tooltip1" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Limpiar"><i class="fa fa-eraser"></i></button>
  </form>        
+{% if error %}<div class="alert alert-danger">{{error}}</div>{% endif %}
 {% endblock %}
