@@ -38,6 +38,9 @@
         label{
             margin: 5px 10px;
         }
+        h4{
+            margin-bottom: 30px;
+            }
     </style>
 <h1 class="page-header">Listado de ejemplares no devueltos</h1>
 <div class="row">
@@ -100,6 +103,7 @@
             </tbody>
             </thead>
         </table>
+        <h4><strong>Total</strong> de ejemplares encontrados: <strong>{{ items }}</strong></h4>
         <a href="{{ urlFor('inicio') }}" role="button" id="tooltip1" type="button" class="btn btn-danger btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Volver a inicio"><i class="fa fa-arrow-left"></i></a>
         <a href="{{ urlFor('listado_devueltos') }}" id="tooltip2" role="button" type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Ir a ejemplares devueltos"><i class="fa fa-arrow-right"></i></a>
     </form>
