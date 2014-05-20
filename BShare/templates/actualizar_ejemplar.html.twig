@@ -29,22 +29,48 @@
             h3{
                 margin-top: 2px;
             }
-            
+            #form1{
+            margin-bottom: 20px;
+
+        }
+        #form1 button{
+            display: inline-block;
+            color: #ffffff;
+            padding: 7px 25px;
+            margin-left: 10px;
+        }
           
     </style>
         <h1 class="page-header">Actualización de ejemplares</h1>
+        <div class="row">
+        <div class="col-sm-6 col-sm-offset-5">
+            <form class="form-inline" role="form" id="form1" method="post" action="/">
+                <div class="form-group">
+                    <label class="sr-only" for="search">Buscar</label>
+                    <input type="text" class="form-control" name="buscar_ejemplar" id="act_ej" placeholder="Buscar código de ejemplar">
+                </div>
+                <button type="submit" class="btn btn-success" name="boton_buscar_ejemplar">Buscar</button>
+            </form>
+        </div>
+    </div>
         <form class="form-horizontal" role="form" method="post" action="/">
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-cogs"></i> Actualización del ejemplar {{ anotar.codigo }}</h3>
+                <h3 class="panel-title"><i class="fa fa-cogs"></i> Actualización del ejemplar {{anotar.codigo }}</h3>
             </div>
             <div class="panel-body">
 
                 <div class="form-group">
-                    <label for="nombre_usuario" class="col-sm-2 control-label">Código del ejemplar</label>
+                    <label for="codigo" class="col-sm-2 control-label">Código del ejemplar</label>
                     <div class="col-sm-10">
                         <h3>{{ anotar.codigo }}</h3>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="titulo" class="col-sm-2 control-label">Título del libro y año</label>
+                    <div class="col-sm-10">
+                        <h3>{{ anotar.titulo }}, {{anotar.anio}}</h3>
                     </div>
                 </div>
                 <div class="form-group">
