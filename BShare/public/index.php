@@ -438,6 +438,27 @@ $app->post('/', function() use ($app) {
             }
             }
             
+            // Buscador de ejemplares para actualización de estado
+            if (isset($_POST['boton_buscar_ejemplar'])) {
+                $buscar_ej = $_POST['buscar_ejemplar'];
+                $busqueda_ej = ORM::for_table('ejemplar')->
+                select_many('ejemplar.*', 'libro.titulo', 'libro.anio')->
+                join('libro', array('ejemplar.libro_id', '=', 'libro.id'))->
+                where('codigo', $buscar_ej)->
+                find_one();
+                if (($_SESSION['AdminCount']) == 1) {
+                $app->render('actualizar_ejemplar.html.twig', array(
+                    'usuario' => $_SESSION['Admin'],
+                    'anotar' => $busqueda_ej
+                ));
+                } else {
+                    $app->render('actualizar_ejemplar.html.twig', array(
+                    'usuario' => $_SESSION['NoAdmin'],
+                    'anotar' => $busqueda_ej
+                ));
+                }
+            }
+            
             /* =========== HISTORIAL DE EJEMPLARES ============== */
             // Boton que redirige a la pantalla de historial cargando los campos del ejemplar seleccionado
             if(isset($_POST['ir_historial'])){
